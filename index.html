@@ -15,50 +15,10 @@
     
     
 </body>
+<script src="GenerateJsonData.js"></script>
 <script src="clsDataTable.js"></script>
 <script>
-    function GenerateJsonData(numCols, numRows, dType, rType)
-    {
-        // dType - bare no keys ["a", "b"]
-        // dType - keyed - {"a":"fubar", "b":"fubar"}
-
-        // rType - string
-        // rType - json
-
-        let arr = 'a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z'.split(',');
-
-        let columns = [];
-        for(let i=0; i<numCols; i++)
-        {
-            if(dType === 'bare')
-            {
-                columns.push(arr[i]);
-            }
-            else if(dType === 'keyed')
-            {
-                var obj = new Object();
-                obj[arr[i]] = 'foo';
-                columns.push(obj);
-            }
-            
-        }
-
-        let rows = [];
-        for(let i=0; i<numRows; i++)
-        {
-            rows.push(columns);
-        }
-
-        // rType: string, json
-        if(rType === 'string')
-        {
-            return JSON.stringify(rows);
-        }
-        if(rType === 'json')
-        {
-            return rows;
-        }
-    }
+    
 
     let dt = new clsDataTable({
         container: document.querySelector('.cntr'),
@@ -68,7 +28,7 @@
     // numCols, numRows,
     // dType: bare, keyed
     // rType: string, json
-    dt.update(GenerateJsonData(5, 10, 'keyed', 'string'));
+    dt.update(GenerateJsonData(10, 10, 'keyed', 'string'));
     //dt.update(null);
 
     //dt.dummyTable();

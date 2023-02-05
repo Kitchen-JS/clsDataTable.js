@@ -3,11 +3,12 @@
 module.exports = {
   content: [
     './src/**/*.{html,js,css}',
-    './index.html',
+    './*.html'
   ],
   theme: {
     colors: {
       transparent: 'transparent',
+      slate: '#708090'
     },
     extend: {
       gridTemplateColumns: {

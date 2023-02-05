@@ -27,46 +27,10 @@ class clsDataTable
 
     buildEmptyTable()
     {
-        if(this.overflowWidth)
-        {
-            this.container.classList.add('w-max');
-        }
-        else
-        {
-            this.container.classList.add('w-fit');
-        }
-
         this.table = document.createElement('div');
-        this.table.classList.add('grid', 'grid-flow-row', 'gap-4')
+        this.table.classList.add('table', 'box-border', 'w-full', 'border', 'border-slate');
 
         this.container.append(this.table);
-    }
-
-    dummyTable()
-    {
-        this.table.innerHTML = `<div class="grid grid-cols-5">
-            <div>01</div>
-            <div>02</div>
-            <div>03</div>
-            <div>04</div>
-            <div>this is long ass column content to see what happens</div>
-        </div>
-        <div class="grid grid-cols-5">
-            <div>01</div>
-            <div>What happens now that this content is long and longer and longer</div>
-            <div>03</div>
-            <div>04</div>
-            <div>05</div>
-        </div>;`
-    }
-
-    addRow()
-    {
-        let row = document.createElement('div');
-        row.classList.add('grid');
-
-        //Need number of columns
-        row.classList.add('grid-cols-5');
     }
 
     update(jsonData)
@@ -93,13 +57,14 @@ class clsDataTable
             jsonData.forEach((row) => 
             {
                 let rowEl = document.createElement('div');
-                rowEl.classList.add('grid');
-                rowEl.classList.add('grid-cols-' + jsonData[0].length);
+                rowEl.classList.add('table-row');
+
                 row.forEach((col) =>
                 {
                     let colEl = document.createElement('div');
                     let key = Object.keys(col)[0];
                     colEl.innerHTML = col[key];
+                    colEl.classList.add('table-cell', 'p-1', 'border', 'border-slate');
                     rowEl.append(colEl);
                 });
                 this.table.append(rowEl);
@@ -107,22 +72,3 @@ class clsDataTable
         }
     }
 }
-
-/*
-<div class="grid grid-flow-row gap-4">
-    <div class="grid grid-cols-5">
-        <div>01</div>
-        <div>02</div>
-        <div>03</div>
-        <div>04</div>
-        <div>this is long ass column content to see what happens</div>
-    </div>
-    <div class="grid grid-cols-5">
-        <div>01</div>
-        <div>What happens now that this content is long and longer and longer</div>
-        <div>03</div>
-        <div>04</div>
-        <div>05</div>
-    </div>
-</div>
-*/
