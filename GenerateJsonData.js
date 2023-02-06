@@ -26,13 +26,15 @@ function GenerateJsonData(numCols, numRows, dType, rType)
         {
             if(dType === 'bare')
             {
-                columns.push(arr[y]);
+                let r = rand();
+                let val = randoTextArr[r];
+                columns.push(val);
             }
             else if(dType === 'keyed')
             {
                 var obj = new Object();
                 let r = rand();
-                obj[arr[y]] = randoTextArr[r] + ' - ' + y + ' ' + r;
+                obj[arr[y]] = randoTextArr[r];
                 columns.push(obj);
             }
         }

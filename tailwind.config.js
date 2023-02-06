@@ -8,6 +8,10 @@ module.exports = {
   theme: {
     colors: {
       transparent: 'transparent',
+      black: '#000000',
+      grey: '#e5e7eb',
+      greyLite: '#f8fafc',
+      greyDark: '#707070',
       slate: '#708090'
     },
     extend: {
@@ -39,6 +43,7 @@ module.exports = {
   plugins: [
     require('@tailwindcss/forms'),
     require('@tailwindcss/aspect-ratio'),
-    require('@tailwindcss/typography')
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/line-clamp'),
   ]
 }
