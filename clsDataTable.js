@@ -41,7 +41,9 @@ class clsDataTable
         this.jsonData; // Modified data by this class and/or user action
 
         this.table; // Main table object
-        this.filters; // Filters, search for table
+        this.filterUI;
+        this.filterBtns; // Filter buttons
+        this.filters = {}; // Map of keys and filter values
         this.keys; // Keys defined for json object
 
         this.symbols = {}; //SVG drawings for UI 
@@ -51,6 +53,11 @@ class clsDataTable
 
     initialize()
     {
+        this.filterUI = document.createElement('div');
+        this.filterUI.classList.add('block', 'absolute', 'bg-greyLite', 'z-9999', 'border', 'rounded', 'w-32', 'h-32', 'max-h-52', 'overflow-y-auto', 'top-10', 'left-32');
+        this.filterUI.innerHTML = '<h4>Filters</h4>';
+        this.container.append(this.filterUI);
+
         this.symbols.disk = '';
         this.symbols.filter = '';
         this.symbols.paperclip = '';
@@ -91,15 +98,38 @@ class clsDataTable
 
     buildFilters()
     {
-        this.filters = document.createElement('div');
-        this.filters.classList.add('w-full', 'block', 'text-xs', 'p-1', 'h-7');
+        this.filterBtns = document.createElement('div');
+        this.filterBtns.classList.add('w-full', 'block', 'text-xs', 'p-1', 'h-7');
 
-        this.filters.append(this.symbols.disk);
-        this.filters.append(this.symbols.filter);
-        this.filters.append(this.symbols.paperclip);
-        this.filters.append(this.symbols.printer);
-        this.filters.append(this.symbols.expand);
-        //this.filters.append(this.symbols.magnify);
+        this.filterBtns.append(this.symbols.disk);
+        this.filterBtns.append(this.symbols.filter);
+        this.filterBtns.append(this.symbols.paperclip);
+        this.filterBtns.append(this.symbols.printer);
+        this.filterBtns.append(this.symbols.expand);
+
+        this.symbols.filter.addEventListener('click', () =>
+        {
+            Object.keys(this.filters).forEach((key) =>
+            {
+                let filterContainer = document.createElement('div');
+                filterContainer.classList.add('block');
+                filterContainer.innerHTML = `${key}: `;
+                let input = document.createElement('input');
+                input.type = 'text';
+                input.classList.add('w-full');
+                input.classList.add('bg-transparent', 'inline-block', 'h-7', 'border', 'border-slate', 'rounded-md', 'sm:text-sm', 'focus:border-greyLite', 'p-1', 'pl-6', 'shadow-sm', 'placeholder-slate', 'focus:outline-none');
+                filterContainer.append(input);
+
+                this.filterUI.append(filterContainer);
+
+                //this.filters[key]
+                //console.log(key)
+            });
+            //this.filterUI
+            //this.filters
+            //this.keys
+            
+        });
 
         let searchBox = document.createElement('div');
         searchBox.classList.add('float-right', 'h-7', 'mb-1');
@@ -116,22 +146,40 @@ class clsDataTable
             this.searchJsonData(searchInput.value);
             
         });
+        searchInput.addEventListener('change', () =>
+        {
+            this.searchJsonData(searchInput.value);
+            
+        });
         searchBox.append(searchInput);
-        this.filters.append(searchBox);
+        let searchCancelBtn = document.createElement('button');
+        searchCancelBtn.classList.add('inline-block', 'border', 'rounded', 'text-greyDark', 'bg-greyLite', 'h-full', 'ml-1', 'w-5', 'font-bold');
+        searchCancelBtn.innerHTML = 'X';
+        searchCancelBtn.addEventListener('click', () =>
+        {
+            searchInput.value = '';
+            Array.from(this.table.querySelectorAll('.table-row-group .table-row')).forEach((row) =>
+            {
+                row.classList.remove('hidden');
+            });
+        });
+        searchBox.append(searchCancelBtn);
 
+        this.filterBtns.append(searchBox);
 
-        this.container.append(this.filters);
+        this.container.append(this.filterBtns);
     }
 
     buildEmptyTable()
     {
-        let children = Array.from(this.container.querySelectorAll('*'));
-        children.forEach((child) =>
+        if(this.table)
         {
-            child.remove();
-        });
-
-        this.buildFilters();
+            this.table.remove();
+        }
+        if(!this.filterBtns)
+        {
+            this.buildFilters();
+        }
 
         this.table = document.createElement('div');
         this.table.classList.add('table', 'box-border', 'w-full', 'border', 'border-slate');
@@ -168,23 +216,26 @@ class clsDataTable
 
     searchJsonData(val)
     {
-        //const filteredPeople = people.filter(person => person.age >= 30);
-        let newJsonData = this.jsonData.filter((row) =>
+        Array.from(this.table.querySelectorAll('.table-row-group .table-row')).forEach((row) =>
         {
-            let flag = false;
-            Object.keys(row).forEach((key) =>
+            let found = false;
+            Array.from(row.querySelectorAll('.table-cell')).forEach((cell) =>
             {
-                if(row[key].indexOf(val) > -1)
+                if(cell.innerHTML.indexOf(val) > -1)
                 {
-                    flag = true;
+                    found = true;
                 }
             });
 
-            return flag;
+            if(!found)
+            {
+                row.classList.add('hidden');
+            }
+            else
+            {
+                row.classList.remove('hidden');
+            }
         });
-
-        console.log(newJsonData)
-        //this.buildTable();
     }
 
     update()
@@ -234,6 +285,10 @@ class clsDataTable
             Object.keys(this.jsonData[0]).forEach((key) =>
             {
                 this.keys.push(key);
+
+                this.filters[key] = '';
+                
+                // console.log(this.filters);
             });
         }
 
