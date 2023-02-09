@@ -11,8 +11,10 @@ npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch **/
 <div class="cntr"></div>
 
 <script>
-let dt = new clsDataTable({
+let dt = new clsDataTable(
+    {
         container: document.querySelector('.cntr'),
+        altRowColor: true,
         sort: true,
         // rowHeight: '10rem',
         // rowHeightMin: '10rem',

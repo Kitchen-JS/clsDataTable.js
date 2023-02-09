@@ -6,10 +6,20 @@
     <link href="/dist/output.css" rel="stylesheet">
 </head>
 <body>
+
+    <!-- <div class="a">a1</div>
+    <div class="b">b1</div>
   
-    <div class="cntr">
-        
-    </div>    
+    <div class="pp">
+        <div class="a">a2</div>
+        <div class="b">b2</div> -->
+        <div class="cntr"></div>
+        <!-- <div class="c">c2</div>
+        <div class="d">d2</div>
+    </div>
+
+    <div class="c">c1</div>
+    <div class="d">d2</div> -->
     
 </body>
 <script src="GenerateJsonData.js"></script>
@@ -18,8 +28,10 @@
     
     
 
-    let dt = new clsDataTable({
+    let dt = new clsDataTable(
+    {
         container: document.querySelector('.cntr'),
+        altRowColor: true,
         sort: true,
         // rowHeight: '10rem',
         // rowHeightMin: '10rem',
@@ -60,7 +72,7 @@
     // numCols, numRows,
     // dType: bare, keyed
     // rType: string, json
-    let jsonData = GenerateJsonData(5, 15, 'bare', 'json');
+    let jsonData = GenerateJsonData(5, 8, 'bare', 'json');
     
     dt.setJsonData(jsonData);
 

@@ -27,6 +27,16 @@ class clsDataTable
             console.error('clsDataTable - options.container must defined');
         }
 
+        this.options.altRowColor;
+        if(typeof options.altRowColor === 'undefined')
+        {
+            this.options.altRowColor = true;
+        }
+        else
+        {
+            this.options.altRowColor = options.altRowColor;
+        }
+
         this.sort = true;
         if(typeof options.sort !== 'undefined')
         {
@@ -37,6 +47,7 @@ class clsDataTable
         this.keyMap = options.keyMap || null;
 
         this.container = options.container; // Element where table rests
+        this.id;
 
         this.jsonDataOriginal; // Original data Passed In
         this.jsonData; // Modified data by this class and/or user action
@@ -54,6 +65,10 @@ class clsDataTable
 
     initialize()
     {
+        this.id = this.randomID();
+        this.container.id = this.id;
+        this.container.classList.add('bg-white');
+
         this.filterUI = document.createElement('div');
         this.filterUI.classList.add('p-4', 'block', 'absolute', 'bg-greyLite', 'z-9999', 'border', 'rounded', 'w-96', 'h-64', 'max-h-64', 'overflow-y-auto', 'top-10', 'left-32', 'hidden');
         this.container.append(this.filterUI);
@@ -159,6 +174,22 @@ class clsDataTable
         this.filterBtns.append(this.symbols.printer);
         this.filterBtns.append(this.symbols.expand);
 
+        this.symbols.expand.setAttribute('expanded', false);
+
+        this.symbols.expand.addEventListener('click', () =>
+        {            
+            if(this.symbols.expand.getAttribute('expanded') == 'false')
+            {
+                this.symbols.expand.setAttribute('expanded', true);
+                this.container.requestFullscreen();
+            }
+            else
+            {
+                document.exitFullscreen();
+                this.symbols.expand.setAttribute('expanded', false);
+            }
+        });
+
         let filterUIClickOffWindowEvent = () =>
         {
             this.filterUI.classList.add('hidden');
@@ -169,6 +200,76 @@ class clsDataTable
         {
             e.stopPropagation();
         };
+
+        this.symbols.printer.addEventListener('click', () =>
+        {
+            // Get all other elements not in same root chain (siblings) in order to hide them
+            let parents = [];
+            parents.push(this.container.parent);
+            let otherElements = [];
+
+            let crawlParentChild = (el) =>
+            {
+                let parent = el.parentNode;
+                parents.push(parent);
+                
+                let sibling  = parent.firstChild;
+
+                while(sibling)
+                {
+                    if (sibling.nodeType === 1 && sibling !== this.container && parents.indexOf(sibling) <= -1 && !sibling.classList.contains('hidden') && sibling.nodeName !== 'SCRIPT') 
+                    {
+                        otherElements.push(sibling);
+                    }
+
+                    sibling = sibling.nextSibling;
+                }
+
+                if(parent.nodeName !== 'BODY')
+                {
+                    crawlParentChild(parent);
+                }
+            }
+
+            crawlParentChild(this.container);
+
+            // Hide other elements
+            otherElements.forEach((el) =>
+            {
+                el.classList.add('hidden');
+            });
+
+            this.filterBtns.classList.add('hidden');
+
+            let colSort = this.table.querySelectorAll('.column-sort');
+
+            colSort.forEach((col) =>
+            {
+                col.classList.add('hidden');
+            });
+
+            // unHide other elements
+            let afterPrint = (e) =>
+            {
+                otherElements.forEach((el) =>
+                {
+                    el.classList.remove('hidden');
+                });
+
+                this.filterBtns.classList.remove('hidden');
+
+                colSort.forEach((col) =>
+                {
+                    col.classList.remove('hidden');
+                });
+
+                window.removeEventListener('afterprint', afterPrint);
+            };
+
+            window.addEventListener('afterprint', afterPrint);
+
+            window.print();
+        });
 
         this.symbols.filter.addEventListener('click', () =>
         {
@@ -428,8 +529,13 @@ class clsDataTable
 
         if(typeof this.keys === 'undefined' || !this.keys || this.keys.length === 0)
         {
-            this.table.innerHTML = `<h1 class="bg-greyLite text-center text-xl font-bold p-4">No Results</h1>`;
-            this.table.classList.remove('table');
+            this.table.innerHTML = `<h1 class="bg-greyLite border border-slate text-center text-xl font-bold p-4">&nbsp;</h1>
+            <div class="table-row-group border border-slate">
+                <div class="table-row border border-slate">
+                    <h1 class="text-center border border-slate text-xl font-bold p-4">No Results</h1>
+                </div>
+            </div>
+            `;
             return;
         }
 
@@ -442,7 +548,7 @@ class clsDataTable
         this.keys.forEach((key) =>
         {
             let col = document.createElement('div');
-            col.classList.add('table-cell', 'p-1', 'border', 'border-grey', 'border-slate');
+            col.classList.add('table-cell', 'p-1', 'border', 'border-slate');
 
             // KeyMap Title
             if(this.keyMap && this.keyMap[key] && this.keyMap[key].title)
@@ -471,7 +577,7 @@ class clsDataTable
             if(this.sort)
             {
                 let sortUI = document.createElement('span');
-                sortUI.classList.add('float-right', 'text-xs', 'cursor-pointer', 'text-greyDark');
+                sortUI.classList.add('column-sort', 'float-right', 'text-xs', 'cursor-pointer', 'text-greyDark');
                 
                 let up = document.createElement('div');
                 up.classList.add('block', 'leading-none');
@@ -503,10 +609,24 @@ class clsDataTable
         rowGroup.classList.add('table-row-group');
 
         let rowctr = 0;
+        let isEven = (n) => 
+        {
+            return n % 2 == 0;
+        };
+        let isOdd = (n) =>
+        {
+            return Math.abs(n % 2) == 1;
+        }
+
         this.jsonData.forEach((row) => 
         {
             let rowEl = document.createElement('div');
-            rowEl.classList.add('table-row');
+            rowEl.classList.add('table-row', 'break-inside-avoid');
+
+            if(this.options.altRowColor && rowctr > 0 && isOdd(rowctr))
+            {
+                rowEl.classList.add('bg-altRowBlueLite');
+            }
 
             if(typeof this.options.rowHeight !== 'undefined' && this.options.rowHeight)
             {
@@ -607,5 +727,16 @@ class clsDataTable
         });
 
         this.table.append(rowGroup);
+    }
+
+    randomID()
+    {
+        let alphaArr = 'a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z'.split(',');
+        let alphaRandNum = Math.floor(Math.random() * 26);
+        let randoAlpha = alphaArr[alphaRandNum];
+        let num = Math.floor(Math.random() * 101); //0-100
+        let timestamp = Date.now();
+        let id = 'DT-' + num + randoAlpha + '-' + timestamp;
+        return id;
     }
 }

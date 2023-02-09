@@ -17,6 +17,8 @@ module.exports = {
       slateBlue: '#506f96',
       slateBlueLite: '#6f9ad1',
       slateBlueDark: '#3a516e',
+      skyBlue: '#d2e4fc',
+      altRowBlueLite: '#f0f5fc',
     },
     extend: {
       gridTemplateColumns: {
