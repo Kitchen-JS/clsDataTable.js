@@ -20,29 +20,24 @@ class clsDataTable
         {
             console.error('clsDataTable - options must be defined');
         }
-        this.options = options || {};
 
         if(typeof options.container === 'undefined')
         {
             console.error('clsDataTable - options.container must defined');
         }
 
-        this.options.altRowColor;
         if(typeof options.altRowColor === 'undefined')
         {
-            this.options.altRowColor = true;
-        }
-        else
-        {
-            this.options.altRowColor = options.altRowColor;
+            options.altRowColor = true;
         }
 
-        this.sort = true;
-        if(typeof options.sort !== 'undefined')
+        if(typeof options.sort === 'undefined')
         {
-            this.sort = options.sort;
+            options.sort = true;
         }
         this.sortVal = 1;
+
+        this.options = options || {};
 
         this.keyMap = options.keyMap || null;
 
@@ -574,7 +569,7 @@ class clsDataTable
                 col.classList.add('hidden');
             }
 
-            if(this.sort)
+            if(this.options.sort)
             {
                 let sortUI = document.createElement('span');
                 sortUI.classList.add('column-sort', 'float-right', 'text-xs', 'cursor-pointer', 'text-greyDark');
