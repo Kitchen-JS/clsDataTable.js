@@ -20,6 +20,7 @@ class clsDataTable
         {
             console.error('clsDataTable - options must be defined');
         }
+        this.options = options || {};
 
         if(typeof options.container === 'undefined')
         {
@@ -54,8 +55,7 @@ class clsDataTable
     initialize()
     {
         this.filterUI = document.createElement('div');
-        this.filterUI.classList.add('block', 'absolute', 'bg-greyLite', 'z-9999', 'border', 'rounded', 'w-32', 'h-32', 'max-h-52', 'overflow-y-auto', 'top-10', 'left-32');
-        this.filterUI.innerHTML = '<h4>Filters</h4>';
+        this.filterUI.classList.add('p-4', 'block', 'absolute', 'bg-greyLite', 'z-9999', 'border', 'rounded', 'w-96', 'h-64', 'max-h-64', 'overflow-y-auto', 'top-10', 'left-32', 'hidden');
         this.container.append(this.filterUI);
 
         this.symbols.disk = '';
@@ -71,7 +71,7 @@ class clsDataTable
         {
             this.symbols[key] = document.createElement('img');
             this.symbols[key].src = dataStr;
-            this.symbols[key].classList.add('w-5', 'h-5', 'mr-3', 'inline-block', 'align-bottom');
+            this.symbols[key].classList.add('w-5', 'h-5', 'mr-3', 'inline-block', 'align-bottom', 'cursor-pointer');
         });
 
         this.symbols.disk.src         +=   '<svg xmlns="http://www.w3.org/2000/svg" width="2.835" height="2.835" fill="DimGray"><path d="M2.83.789l-.51-.77A.038.038 0 002.287 0H.091C.042 0 0 .044 0 .101v2.633c0 .057.041.102.091.102h2.653c.051 0 .092-.045.092-.102V.81C2.835.801 2.833.792 2.83.789zM.315.21c0-.028.024-.05.052-.05H2.22c.027 0 .057.021.057.05l-.004.844a.055.055 0 01-.053.052H.367a.052.052 0 01-.052-.052V.21zm2.203 2.327c-.001.031-.026.063-.06.063H.375c-.031 0-.059-.027-.059-.063v-1.02a.06.06 0 01.059-.061h2.083c.03 0 .063.026.063.061l-.003 1.02z"/><path d="M2.185 2.152H.652c-.051 0-.092.027-.092.061 0 .035.041.063.092.063h1.533c.051 0 .09-.024.09-.063 0-.034-.041-.061-.09-.061zM2.185 1.712H.652c-.051 0-.092.026-.092.06 0 .036.041.062.092.062h1.533c.051 0 .09-.025.09-.062 0-.033-.039-.06-.09-.06z"/></svg>';
@@ -93,6 +93,58 @@ class clsDataTable
         this.jsonDataOriginal = jsonData;
         this.jsonData = jsonData;
 
+        if(typeof this.jsonData === 'undefined' || !this.jsonData)
+        {
+            console.log('clsDataTable.update: jsonData is empty');
+            this.jsonData = [];
+        }
+
+        if(typeof this.jsonData === 'string')
+        {
+            this.jsonData = JSON.parse(this.jsonData);
+        }
+        
+        if(this.jsonData && this.jsonData.length <= 1)
+        {
+            console.log('clsDataTable.update: jsonData is empty');
+        }
+        else
+        {
+            //If Keys/Headers do not exist create them
+            this.jsonData = this.jsonData.map((row) =>
+            {
+                let i = 0;
+                var obj = new Object();
+                row = row.forEach((col) =>
+                {
+                    if(typeof col === 'string')
+                    {
+                        obj['col' + i] = col;
+                        i++;
+                    }
+                    else
+                    {
+                        obj[Object.keys(col)[0]] = col[Object.keys(col)[0]];
+                        i++;
+                    }
+                });
+
+                return obj;
+            });
+
+            // Parse Keys
+            this.keys = [];
+            Object.keys(this.jsonData[0]).forEach((key) =>
+            {
+                this.keys.push(key);
+                
+                this.filters[key] = {};
+
+                this.filters[key].value = '';
+                this.filters[key].show = true;
+            });
+        }
+
         this.update();
     }
 
@@ -107,28 +159,127 @@ class clsDataTable
         this.filterBtns.append(this.symbols.printer);
         this.filterBtns.append(this.symbols.expand);
 
+        let filterUIClickOffWindowEvent = () =>
+        {
+            this.filterUI.classList.add('hidden');
+            window.removeEventListener('click', filterUIClickOffWindowEvent);
+            this.filterUI.removeEventListener('click', filterUIClickOffUIEvent);
+        };
+        let filterUIClickOffUIEvent = (e) =>
+        {
+            e.stopPropagation();
+        };
+
         this.symbols.filter.addEventListener('click', () =>
         {
+            Array.from(this.filterUI.querySelectorAll('*')).forEach((el) =>
+            {
+                el.remove();
+            });
+
+            let titleRow = document.createElement('div');
+            titleRow.classList.add('w-full', 'mb-3');
+
+            let title = document.createElement('div');
+            title.classList.add('inline-block', 'font-bold', 'text-lg', 'w-8/12');
+            title.innerHTML = 'Filters';
+            titleRow.append(title);
+
+            let closeFilterUI = document.createElement('button');
+            closeFilterUI.classList.add('inline-block', 'border', 'rounded', 'text-greyDark', 'text-center', 'bg-greyLite', 'h-full', 'ml-1', 'font-bold', 'w-6', 'float-right');
+            closeFilterUI.innerHTML = 'X';
+            closeFilterUI.addEventListener('click', () =>
+            {
+                this.filterUI.classList.add('hidden');
+                window.removeEventListener('click', filterUIClickOffWindowEvent);
+                this.filterUI.removeEventListener('click', filterUIClickOffUIEvent);
+            });
+            titleRow.append(closeFilterUI);
+
+            this.filterUI.append(titleRow);
+
+            let colHeadRow = document.createElement('div');
+            colHeadRow.classList.add('w-full', 'mb-3', 'font-bold');
+
+            let chrc1 = document.createElement('div');
+            chrc1.classList.add('w-2/12', 'text-left', 'inline-block', 'underline');
+            chrc1.innerHTML = 'Col';
+            let chrc2 = document.createElement('div');
+            chrc2.classList.add('w-5/12', 'text-center', 'inline-block', 'underline');
+            chrc2.innerHTML = 'Filter';
+            let chrc3 = document.createElement('div');
+            chrc3.classList.add('w-1/12', 'text-center', 'inline-block', 'underline');
+            chrc3.innerHTML = 'Clr';
+            let chrc4 = document.createElement('div');
+            chrc4.classList.add('w-4/12', 'text-right', 'inline-block', 'underline');
+            chrc4.innerHTML = '+/-&nbsp;';
+            
+            colHeadRow.append(chrc1, chrc2, chrc3, chrc4);
+
+            this.filterUI.append(colHeadRow);
+
             Object.keys(this.filters).forEach((key) =>
             {
                 let filterContainer = document.createElement('div');
                 filterContainer.classList.add('block');
-                filterContainer.innerHTML = `${key}: `;
+
+                let filterRow = document.createElement('div');
+                filterRow.classList.add('w-full', 'mb-2', 'align-middle');
+
+                let keyEl = document.createElement('span');
+                keyEl.classList.add('inline-block', 'w-2/12', 'align-middle');
+                keyEl.innerHTML = `${key}: `;
+                filterRow.append(keyEl);
+
                 let input = document.createElement('input');
                 input.type = 'text';
-                input.classList.add('w-full');
-                input.classList.add('bg-transparent', 'inline-block', 'h-7', 'border', 'border-slate', 'rounded-md', 'sm:text-sm', 'focus:border-greyLite', 'p-1', 'pl-6', 'shadow-sm', 'placeholder-slate', 'focus:outline-none');
-                filterContainer.append(input);
+                input.classList.add('w-5/12');
+                input.classList.add('bg-transparent', 'inline-block', 'h-7', 'border', 'border-slate', 'rounded-md', 'sm:text-sm', 'focus:border-greyLite', 'p-1', 'pl-6', 'shadow-sm', 'placeholder-slate', 'focus:outline-none', 'align-middle');
+                input.value = this.filters[key].value;
+                input.addEventListener('keyup', () =>
+                {
+                    this.filters[key].value = input.value;
 
-                this.filterUI.append(filterContainer);
+                    this.applyFilters();
+                });
+                filterRow.append(input);
 
-                //this.filters[key]
-                //console.log(key)
+                let clear = document.createElement('button');
+                clear.classList.add('inline-block', 'border', 'rounded', 'text-greyDark', 'bg-greyLite', 'h-full', 'ml-1', 'w-5', 'font-bold', 'align-middle');
+                clear.innerHTML = 'X'
+                clear.addEventListener('click', () =>
+                {
+                    input.value = '';
+                    this.filters[key].value = '';
+
+                    this.applyFilters();
+                });
+                filterRow.append(clear);
+
+                let showCol = document.createElement('input');
+                showCol.type = 'checkbox';
+                showCol.classList.add('bg-transparent', 'inline', 'h-7', 'border', 'border-slate', 'rounded-md', 'sm:text-sm', 'p-1', 'pl-6', 'shadow-sm', 'placeholder-slate', 'float-right', 'align-middle');
+                showCol.classList.add('focus:border-greyLite', 'focus:checked:border-greyLite', 'focus:border-greyLite', 'focus:outline-none');
+                showCol.classList.add('checked:bg-slate', 'focus:bg-white', 'focus:checked:bg-slate', 'focus-visible:bg-white', 'focus-visible:checked:bg-slate', 'hover:border-greyLite', 'hover:bg-black', 'hover:checked:bg-black');
+                showCol.checked = this.filters[key].show;
+                showCol.addEventListener('change', () =>
+                {
+                    this.filters[key].show = showCol.checked;
+
+                    this.applyFilters();
+                });
+                filterRow.append(showCol);
+
+                this.filterUI.append(filterRow);
+
+                setTimeout(() =>
+                {
+                    window.addEventListener('click', filterUIClickOffWindowEvent);
+                    this.filterUI.addEventListener('click', filterUIClickOffUIEvent);
+                }, 800);
             });
-            //this.filterUI
-            //this.filters
-            //this.keys
-            
+
+            this.filterUI.classList.toggle('hidden');          
         });
 
         let searchBox = document.createElement('div');
@@ -214,6 +365,11 @@ class clsDataTable
         this.buildTable();
     }
 
+    applyFilters()
+    {
+        console.log(this.filters)
+    }
+
     searchJsonData(val)
     {
         Array.from(this.table.querySelectorAll('.table-row-group .table-row')).forEach((row) =>
@@ -239,56 +395,27 @@ class clsDataTable
     }
 
     update()
-    {
-        if(typeof this.jsonData === 'undefined' || !this.jsonData)
-        {
-            console.log('clsDataTable.update: jsonData is empty');
-            this.jsonData = [];
-        }
-
-        if(typeof this.jsonData === 'string')
-        {
-            this.jsonData = JSON.parse(this.jsonData);
-        }
-        
+    {        
         if(this.jsonData && this.jsonData.length <= 1)
         {
             console.log('clsDataTable.update: jsonData is empty');
         }
         else
         {
-            //If Keys/Headers do not exist create them
-            this.jsonData = this.jsonData.map((row) =>
-            {
-                let i = 0;
-                var obj = new Object();
-                row = row.forEach((col) =>
-                {
-                    if(typeof col === 'string')
-                    {
-                        obj[i] = col;
-
-                        i++;
-                    }
-                    else
-                    {
-                        obj[Object.keys(col)[0]] = col[Object.keys(col)[0]];
-                        i++;
-                    }
-                });
-
-                return obj;
-            });
-
             // Parse Keys
             this.keys = [];
             Object.keys(this.jsonData[0]).forEach((key) =>
             {
                 this.keys.push(key);
 
-                this.filters[key] = '';
-                
-                // console.log(this.filters);
+                if(typeof this.filters[key].value === 'undefined' || !this.filters[key].value)
+                {
+                    this.filters[key].value = '';
+                }
+                if(typeof this.filters[key].show === 'undefined')
+                {
+                    this.filters[key].show = true;
+                }
             });
         }
 
@@ -375,10 +502,24 @@ class clsDataTable
         let rowGroup = document.createElement('div');
         rowGroup.classList.add('table-row-group');
 
+        let rowctr = 0;
         this.jsonData.forEach((row) => 
         {
             let rowEl = document.createElement('div');
             rowEl.classList.add('table-row');
+
+            if(typeof this.options.rowHeight !== 'undefined' && this.options.rowHeight)
+            {
+                rowEl.style.height = this.options.rowHeight;
+            }
+            if(typeof this.options.rowHeightMin !== 'undefined' && this.options.rowHeightMin)
+            {
+                rowEl.style.minHeight = this.options.rowHeightMin;
+            }
+            if(typeof this.options.rowHeightMax !== 'undefined' && this.options.rowHeightMax)
+            {
+                rowEl.style.maxHeight = this.options.rowHeightMax;
+            }
 
             let colCtr=0;
             Object.keys(row).forEach((rowKey) =>
@@ -408,6 +549,10 @@ class clsDataTable
                 {
                     colEl.innerHTML = this.keyMap[colCtr].render(colEl.innerHTML);
                 }
+
+                //Col Class
+                colEl.classList.add(rowKey);
+
                 
                 // KeyMap Hidden
                 if(this.keyMap && this.keyMap[key] && this.keyMap[key].hidden)
@@ -419,11 +564,46 @@ class clsDataTable
                     colEl.classList.add('hidden');
                 }
 
+                //Col Width
+                if(rowctr === 0 && this.keyMap && this.keyMap[colCtr] && this.keyMap[colCtr].width)
+                {
+                    //colEl.style.width = this.keyMap[colCtr].width;
+                    colEl.style.setProperty('width', this.keyMap[colCtr].width, 'important');
+                }
+                else if(rowctr === 0 && typeof this.options.colWidth !== 'undefined' && this.options.colWidth)
+                {
+                    //colEl.style.width = this.options.colWidth;
+                    colEl.style.setProperty('width', this.options.colWidth, 'important');
+                }
+                //min Col Width
+                if(rowctr === 0 && this.keyMap && this.keyMap[colCtr] && this.keyMap[colCtr].minwidth)
+                {
+                    //colEl.style.minWidth = this.keyMap[colCtr].minwidth;
+                    colEl.style.setProperty('min-width', this.keyMap[colCtr].minwidth, 'important');
+                }
+                else if(rowctr === 0 && typeof this.options.colWidthMin !== 'undefined' && this.options.colWidthMin)
+                {
+                    //colEl.style.minwidth = this.options.colWidthMin;
+                    colEl.style.setProperty('min-width', this.options.colWidthMin, 'important');
+                }
+                //max Col Width
+                if(rowctr === 0 && this.keyMap && this.keyMap[colCtr] && this.keyMap[colCtr].maxwidth)
+                {
+                    //colEl.style.maxWidth = this.keyMap[colCtr].maxwidth;
+                    colEl.style.setProperty('max-width', this.keyMap[colCtr].maxwidth, 'important');
+                }
+                else if(rowctr === 0 && typeof this.options.colWidthMax !== 'undefined' && this.options.colWidthMax)
+                {
+                    //colEl.style.maxwidth = this.options.colWidthMax;
+                    colEl.style.setProperty('max-width', this.options.colWidthMax, 'important');
+                }
+
                 rowEl.append(colEl);
                 
                 colCtr++;
             });
             rowGroup.append(rowEl);
+            rowctr++;
         });
 
         this.table.append(rowGroup);

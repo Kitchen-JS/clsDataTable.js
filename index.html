@@ -21,9 +21,18 @@
     let dt = new clsDataTable({
         container: document.querySelector('.cntr'),
         sort: true,
+        // rowHeight: '10rem',
+        // rowHeightMin: '10rem',
+        // rowHeightMax: '10rem',
+        // colWidth: '10rem',
+        // colWidthMin: '10rem',
+        // colWidthMax: '10rem',
         keyMap: {
             0: {
                 title: 'Foo a',
+                width: '10rem',
+                minwidth: '10rem',
+                maxwidth: '10rem',
                 render: (data) =>
                 {
                     return 'foo';
@@ -41,6 +50,9 @@
             },
             2: {
                 hidden: true
+            },
+            'col3': {
+                hidden: false
             }
         }
     });
@@ -48,7 +60,7 @@
     // numCols, numRows,
     // dType: bare, keyed
     // rType: string, json
-    let jsonData = GenerateJsonData(5, 10, 'keyed', 'json');
+    let jsonData = GenerateJsonData(5, 15, 'bare', 'json');
     
     dt.setJsonData(jsonData);
 

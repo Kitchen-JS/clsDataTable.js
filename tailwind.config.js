@@ -9,10 +9,14 @@ module.exports = {
     colors: {
       transparent: 'transparent',
       black: '#000000',
+      white: '#fff',
       grey: '#e5e7eb',
       greyLite: '#f8fafc',
       greyDark: '#707070',
-      slate: '#708090'
+      slate: '#708090',
+      slateBlue: '#506f96',
+      slateBlueLite: '#6f9ad1',
+      slateBlueDark: '#3a516e',
     },
     extend: {
       gridTemplateColumns: {

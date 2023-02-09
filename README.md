@@ -14,9 +14,18 @@ npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch **/
 let dt = new clsDataTable({
         container: document.querySelector('.cntr'),
         sort: true,
+        // rowHeight: '10rem',
+        // rowHeightMin: '10rem',
+        // rowHeightMax: '10rem',
+        // colWidth: '10rem',
+        // colWidthMin: '10rem',
+        // colWidthMax: '10rem',
         keyMap: {
             0: {
                 title: 'Foo a',
+                width: '10rem',
+                minwidth: '10rem',
+                maxwidth: '10rem',
                 render: (data) =>
                 {
                     return 'foo';
@@ -34,6 +43,9 @@ let dt = new clsDataTable({
             },
             2: {
                 hidden: true
+            },
+            'col3': {
+                hidden: false
             }
         }
     });
