@@ -54,15 +54,15 @@ let dt = new clsDataTable({
 
 ### Set JSON Data
 ```
-    //Function to generate random JSON Data
-    // numCols
-    // numRows
-    // dType (data type): bare, keyed
-    // rType (return type): string, json
-    // GenerateJsonData(numCols, numRows, dType, rType);
-    let jsonData = GenerateJsonData(5, 15, 'bare', 'json');
-    
-    dt.setJsonData(jsonData);
+//Function to generate random JSON Data
+// numCols
+// numRows
+// dType (data type): bare, keyed
+// rType (return type): string, json
+// GenerateJsonData(numCols, numRows, dType, rType);
+let jsonData = GenerateJsonData(5, 15, 'bare', 'json');
+
+dt.setJsonData(jsonData);
 ```
 ```
 dt.setJsonData('[[{"a":"Pellentesque"},{"b":"porttitor"},{"c":"libero"},{"d":"fermentum"},{"e":"tincidunt ex non est tempus"}],[{"a":"massa"},{"b":"libero"},{"c":"tincidunt feugiat in vulputate nisl"},{"d":"Pellentesque"},{"e":"libero"}],[{"a":"tincidunt ex non est tempus"},{"b":"tincidunt ex non est tempus"},{"c":"Pellentesque"},{"d":"fermentum"},{"e":"tincidunt feugiat in vulputate nisl"}],[{"a":"Pellentesque"},{"b":"Pellentesque"},{"c":"porttitor"},{"d":"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit"},{"e":"Pellentesque"}],[{"a":"porttitor"},{"b":"fermentum"},{"c":"porttitor"},{"d":"Pellentesque"},{"e":"Pellentesque"}],[{"a":"porttitor"},{"b":"libero"},{"c":"porttitor"},{"d":"tincidunt ex non est tempus"},{"e":"fermentum"}],[{"a":"libero"},{"b":"vulputate"},{"c":"feugiat"},{"d":"Etiam in consequat"},{"e":"feugiat"}],[{"a":"tincidunt feugiat in vulputate nisl"},{"b":"Quisque eu lorem elementum"},{"c":"Quisque eu lorem elementum"},{"d":"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit"},{"e":"feugiat"}],[{"a":"tincidunt feugiat in vulputate nisl"},{"b":"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit"},{"c":"libero"},{"d":"vulputate"},{"e":"Quisque eu lorem elementum"}],[{"a":"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit"},{"b":"tincidunt feugiat in vulputate nisl"},{"c":"massa"},{"d":"Quisque eu lorem elementum"},{"e":"Etiam in consequat"}]]');
