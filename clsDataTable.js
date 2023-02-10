@@ -93,6 +93,9 @@ class clsDataTable
         this.symbols.expand.src       +=   '<svg xmlns="http://www.w3.org/2000/svg" width="2.834" height="2.834" fill="DimGray"><path d="M2.711 0h-.693a.124.124 0 00-.124.123l.285.287-.343.344a.17.17 0 00-.053.125.179.179 0 00.303.125L2.429.66l.282.284A.124.124 0 002.834.82V.125A.124.124 0 002.711 0zM2.709 1.893l-.289.29-.351-.351a.177.177 0 00-.25 0 .174.174 0 000 .248l.351.351-.279.278c0 .067.057.123.123.123h.695a.125.125 0 00.125-.123v-.692a.124.124 0 00-.125-.124zM.66.408L.944.125A.124.124 0 00.82.002H.125A.125.125 0 000 .125v.692C0 .886.057.94.125.94L.41.656l.354.354c.033.035.079.052.125.052s.09-.017.125-.052a.177.177 0 000-.249L.66.408zM.873 1.713l-.463.465-.287-.287A.123.123 0 000 2.015v.696c0 .068.056.123.123.123h.693a.123.123 0 00.123-.123l-.281-.283.465-.465a.179.179 0 000-.25.179.179 0 00-.25 0z"/></svg>';
         this.symbols.magnify.src      +=   '<svg xmlns="http://www.w3.org/2000/svg" width="2.834" height="2.834" fill="Gray"><path d="M.291 1.693a.995.995 0 001.354.047l.179.18a.169.169 0 00.038.186l.677.679a.177.177 0 00.244 0 .176.176 0 000-.246l-.677-.676a.17.17 0 00-.186-.038l-.18-.18A.99.99 0 001.694.291a.99.99 0 00-1.403 0 .99.99 0 000 1.402zM.16.992A.83.83 0 011.582.404a.835.835 0 01-.59 1.422A.835.835 0 01.16.992z"/><path d="M.463 1.523A.748.748 0 10.994.244a.746.746 0 00-.75.748c0 .2.077.389.219.531zm.645.059a.04.04 0 01-.022.006.639.639 0 01-.5-.187.64.64 0 01-.163-.637.06.06 0 01.03-.033A.053.053 0 01.494.73a.062.062 0 01.01.003.055.055 0 01.031.062v.006a.514.514 0 00.131.517.521.521 0 00.406.152.057.057 0 01.06.045l.002.007-.001.022-.002.006-.006.015a.135.135 0 01-.017.017z"/></svg>';
 
+        // var parser = new DOMParser();
+        // let svgData = parser.parseFromString(this.symbols.paperclip.src, "image/svg+xml");
+
         this.events.filterUIClickOffWindowEvent = () =>
         {
             this.filterUI.classList.add('hidden');
@@ -185,6 +188,20 @@ class clsDataTable
         this.symbols.disk.addEventListener('click', () =>
         {
             this.handleExport();
+        });
+
+        this.symbols.paperclip.addEventListener('click', (e) =>
+        {
+            let data = `${this.convert('tab')}`;
+            navigator.clipboard.writeText(data);
+
+            this.symbols.paperclip.classList.add('border-2', 'border-success', 'rounded', 'bg-success', 'text-success', 'underline');
+            this.symbols.paperclip
+
+            setTimeout(() => 
+            {
+                this.symbols.paperclip.classList.remove('border-2', 'border-success', 'rounded', 'bg-success', 'text-success', 'underline');
+            }, 1200);
         });
 
         this.symbols.expand.setAttribute('expanded', false);
@@ -788,13 +805,23 @@ class clsDataTable
 
         let exportCsv = document.createElement('button');
         exportCsv.classList.add('block', 'border', 'rounded', 'p-2', 'm-2', 'bg-slate', 'text-white', 'font-bold');
-        exportCsv.innerHTML = 'Download as CSV';
+        exportCsv.innerHTML = 'Download as CSV Comma Delimited';
         exportCsv.addEventListener('click', () =>
         {
             this.export('csv');
             exportUI.remove();
         });
         exportUI.append(exportCsv);
+
+        let exportTab = document.createElement('button');
+        exportTab.classList.add('block', 'border', 'rounded', 'p-2', 'm-2', 'bg-slate', 'text-white', 'font-bold');
+        exportTab.innerHTML = 'Download as TSV Tab Delimited';
+        exportTab.addEventListener('click', () =>
+        {
+            this.export('tab');
+            exportUI.remove();
+        });
+        exportUI.append(exportTab);
 
         let exportJson = document.createElement('button');
         exportJson.classList.add('block', 'border', 'rounded', 'p-2', 'm-2', 'bg-slate', 'text-white', 'font-bold');
@@ -881,6 +908,27 @@ class clsDataTable
             return csv;
         }
 
+        if(type === 'tab')
+        {
+            let tab = ``;
+            tab += keys.join(`\t`) + `\r\n`;
+
+            dataSet.forEach((row) =>
+            {
+                let tabRow = ``;
+                
+                keys.forEach((key) =>
+                {
+                    tabRow += `"${row[key]}"\t`;
+                });
+                tabRow = tabRow.replace(/,\s*$/, '');
+
+                tab += tabRow + `\r\n`;
+            });
+
+            return tab;
+        }
+
     }
 
     export(type)
@@ -892,6 +940,11 @@ class clsDataTable
         {
             data = 'data:text/csv;charset=utf-8,';
             link.setAttribute('download', 'export.csv');
+        }
+        if(type === 'tab')
+        {
+            data = 'data:text/tab-separated-values;charset=utf-8,';
+            link.setAttribute('download', 'export.tsv');
         }
         if(type === 'json')
         {
