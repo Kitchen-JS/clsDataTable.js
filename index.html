@@ -48,6 +48,7 @@
                 render: (data) =>
                 {
                     let btn = document.createElement('button');
+                    btn.classList.add('border', 'w-full', 'rounded', 'bg-greyLite');
                     btn.innerHTML = 'Bob';
                     btn.value = data;
                     btn.addEventListener('click', () =>
@@ -92,7 +93,7 @@
 
     document.querySelector('.changeData').addEventListener('click', () =>
     {
-        jsonData = GenerateJsonData(10, 300, 'bare', 'json');
+        jsonData = GenerateJsonData(40, 300, 'bare', 'json');
         dt.setJsonData(jsonData);
     });
 

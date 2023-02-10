@@ -67,7 +67,7 @@ class clsDataTable
         this.container.classList.add('bg-white');
 
         this.filterUI = document.createElement('div');
-        this.filterUI.classList.add('p-4', 'block', 'absolute', 'bg-greyLite', 'z-9999', 'border', 'rounded', 'w-96', 'h-64', 'max-h-64', 'overflow-y-auto', 'top-10', 'left-32', 'hidden');
+        this.filterUI.classList.add('p-4', 'block', 'absolute', 'bg-greyLite', 'z-9999', 'border', 'rounded', 'w-96', 'h-64', 'max-h-64', 'overflow-y-auto', 'top-10', 'left-44', 'hidden');
         this.container.append(this.filterUI);
 
         this.symbols.filter = '';
@@ -184,7 +184,7 @@ class clsDataTable
 
         this.symbols.disk.addEventListener('click', () =>
         {
-            this.export();
+            this.handleExport();
         });
 
         this.symbols.expand.setAttribute('expanded', false);
@@ -363,8 +363,7 @@ class clsDataTable
                 <div class="table-row border border-slate">
                     <h1 class="text-center border border-slate text-xl font-bold p-4">No Results</h1>
                 </div>
-            </div>
-            `;
+            </div>`;
             return;
         }
 
@@ -450,7 +449,8 @@ class clsDataTable
         this.jsonData.forEach((row) => 
         {
             let rowEl = document.createElement('div');
-            rowEl.classList.add('table-row', 'break-inside-avoid');
+            let rowIndex = 'row-' + rowctr;
+            rowEl.classList.add('table-row', 'break-inside-avoid', rowIndex);
 
             if(this.options.altRowColor && rowctr > 0 && isOdd(rowctr))
             {
@@ -762,11 +762,66 @@ class clsDataTable
         this.filterUI.classList.toggle('hidden');  
     }
 
-    export()
+    handleExport()
     {
+        let exportUI = document.createElement('div');
+        exportUI.classList.add('p-4', 'block', 'absolute', 'bg-greyLite', 'z-9999', 'border', 'rounded', 'w-96', 'h-64', 'max-h-64', 'overflow-y-auto', 'top-10', 'left-44');
+
+        let uiTitleRow = document.createElement('div');
+        uiTitleRow.classList.add('w-full', 'mb-6');
+
+        let uiTitle = document.createElement('div');
+        uiTitle.classList.add('inline-block', 'w-3/4', 'text-lg', 'font-bold');
+        uiTitle.innerHTML = 'Export';
+        uiTitleRow.append(uiTitle);
+
+        let closeUI = document.createElement('button');
+        closeUI.classList.add('inline-block', 'border', 'rounded', 'p-2', 'text-sm', 'bg-greyLite', 'font-bold', 'float-right');
+        closeUI.innerHTML = 'X';
+        closeUI.addEventListener('click', () =>
+        {
+            exportUI.remove();
+        });
+        uiTitleRow.append(closeUI);
+
+        exportUI.append(uiTitleRow);
+
+        let exportCsv = document.createElement('button');
+        exportCsv.classList.add('block', 'border', 'rounded', 'p-2', 'm-2', 'bg-slate', 'text-white', 'font-bold');
+        exportCsv.innerHTML = 'Download as CSV';
+        exportCsv.addEventListener('click', () =>
+        {
+            this.export('csv');
+            exportUI.remove();
+        });
+        exportUI.append(exportCsv);
+
+        let exportJson = document.createElement('button');
+        exportJson.classList.add('block', 'border', 'rounded', 'p-2', 'm-2', 'bg-slate', 'text-white', 'font-bold');
+        exportJson.innerHTML = 'Download as JSON';
+        exportJson.addEventListener('click', () =>
+        {
+            this.export('json');
+            exportUI.remove();
+        });
+        exportUI.append(exportJson);
+        
+        this.container.append(exportUI);
+    }
+
+    convert(type)
+    {
+        /***** Build JSON Start *****/
+        let dataSet = []; // For building dataSet to export as JSON
+
         let keys = [];
         Array.from(this.table.querySelectorAll('.table-header-group .table-cell')).forEach((headerCell) =>
         {
+            if(headerCell.classList.contains('hidden'))
+            {
+                return;
+            }
+
             let val = headerCell.innerHTML;
             val = this.stripHtml(val);
             keys.push(val);
@@ -778,32 +833,99 @@ class clsDataTable
             {
                 return;
             }
+
+            let rowSet = {};
             
             let cellCtr = 0;
             Array.from(row.querySelectorAll('.table-cell')).forEach((cell) =>
             {
-                if(!this.containsHtmlNode(cell))
+                if(cell.classList.contains('hidden'))
                 {
-                    //cell
+                    return;
                 }
-                else
-                {
-                    //parse value
-                    cell = this.getHtmlValue(cell);
-                }
+
+                cell = this.getHtmlValue(cell);
+
+                rowSet[keys[cellCtr]] = cell; // Add to rowSet for building dataSet to export as JSON
 
                 cellCtr++;
             });
+
+            dataSet.push(rowSet);
         });
+        /***** Build JSON End *****/
+
+        if(type === 'json')
+        {
+            return JSON.stringify(dataSet);
+        }
+
+        if(type === 'csv')
+        {
+            let csv = ``;
+            csv += keys.join(",") + `\r\n`;
+
+            dataSet.forEach((row) =>
+            {
+                let csvRow = ``;
+                
+                keys.forEach((key) =>
+                {
+                    csvRow += `"${row[key]}",`;
+                });
+                csvRow = csvRow.replace(/,\s*$/, '');
+
+                csv += csvRow + `\r\n`;
+            });
+
+            return csv;
+        }
+
+    }
+
+    export(type)
+    {
+        let data = '';
+        let link = document.createElement('a');
+
+        if(type === 'csv')
+        {
+            data = 'data:text/csv;charset=utf-8,';
+            link.setAttribute('download', 'export.csv');
+        }
+        if(type === 'json')
+        {
+            data = 'data:application/json;charset=utf-8,';
+            link.setAttribute('download', 'export.json');
+        }
+
+        let encodedUri = data + encodeURI(this.convert(type));
+        link.style.visibility = 'hidden';
+        link.setAttribute('href', encodedUri);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
     }
 
     getHtmlValue(cell)
     {
+        let value;
+        let ndCtr = 0;
         cell.childNodes.forEach((nd) =>
         {
-            console.log(nd);
+            if(typeof nd.value != 'undefined')
+            {
+                value = nd.value;
+            }
+
+            ndCtr++;
         });
-        //return '';
+
+        if(!value)
+        {
+            value = this.stripHtml(cell.innerHTML);
+        }
+        return value;
     }
 
     containsHtmlNode(cell)
@@ -824,6 +946,8 @@ class clsDataTable
     {
         html = html.replaceAll(/<[^>]*>/g, "");
         html = html.replace('▲▼', '');
+        html = html.replace('▲', '');
+        html = html.replace('▼', '');
         return html;
     }
 
