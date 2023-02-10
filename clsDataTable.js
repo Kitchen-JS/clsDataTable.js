@@ -767,7 +767,9 @@ class clsDataTable
         let keys = [];
         Array.from(this.table.querySelectorAll('.table-header-group .table-cell')).forEach((headerCell) =>
         {
-            keys.push(headerCell.innerHTML);
+            let val = headerCell.innerHTML;
+            val = this.stripHtml(val);
+            keys.push(val);
         });
 
         Array.from(this.table.querySelectorAll('.table-row-group .table-row')).forEach((row) =>
@@ -780,10 +782,49 @@ class clsDataTable
             let cellCtr = 0;
             Array.from(row.querySelectorAll('.table-cell')).forEach((cell) =>
             {
+                if(!this.containsHtmlNode(cell))
+                {
+                    //cell
+                }
+                else
+                {
+                    //parse value
+                    cell = this.getHtmlValue(cell);
+                }
 
                 cellCtr++;
             });
         });
+    }
+
+    getHtmlValue(cell)
+    {
+        cell.childNodes.forEach((nd) =>
+        {
+            console.log(nd);
+        });
+        //return '';
+    }
+
+    containsHtmlNode(cell)
+    {
+        let x = false;
+        cell.childNodes.forEach((nd) =>
+        {
+            if(nd.nodeType === 1)
+            {
+                x = true;
+            }
+        });
+
+        return x;
+    }
+
+    stripHtml(html)
+    {
+        html = html.replaceAll(/<[^>]*>/g, "");
+        html = html.replace('▲▼', '');
+        return html;
     }
 
     randomID()
