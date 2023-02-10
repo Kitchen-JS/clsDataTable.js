@@ -490,12 +490,12 @@ class clsDataTable
                 }
 
                 // KeyMap Render Function
-                if(this.keyMap && this.keyMap[key] && this.keyMap[key].render)
+                if(this.keyMap && this.keyMap[rowKey] && this.keyMap[rowKey].render)
                 {
                     let data = colEl.innerHTML;
                     colEl.innerHTML = '';
 
-                    let val = this.keyMap[key].render(data);
+                    let val = this.keyMap[rowKey].render(data);
                     if(typeof val === 'object')
                     {
                         colEl.append(val);
@@ -526,7 +526,7 @@ class clsDataTable
 
                 
                 // KeyMap Hidden
-                if(this.keyMap && this.keyMap[key] && this.keyMap[key].hidden)
+                if(this.keyMap && this.keyMap[rowKey] && this.keyMap[rowKey].hidden)
                 {
                     colEl.classList.add('hidden');
                 }

@@ -71,7 +71,13 @@
             2: {
                 hidden: true
             },
-            'col3': {
+            'e': {
+                render: (data) =>
+                {
+                    let p = document.createElement('p');
+                    p.innerHTML = data.substring(0, 3);
+                    return p;
+                },
                 hidden: false
             }
         }
@@ -80,7 +86,7 @@
     // numCols, numRows,
     // dType: bare, keyed
     // rType: string, json
-    let jsonData = GenerateJsonData(5, 8, 'bare', 'json');
+    let jsonData = GenerateJsonData(5, 8, 'keyed', 'json');
     
     dt.setJsonData(jsonData);
 
