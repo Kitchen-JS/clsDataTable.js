@@ -14,7 +14,6 @@ function GenerateJsonData(numCols, numRows, dType, rType)
     const rand = () => 
     {
         let num = Math.floor(Math.random() * randoTextArr.length); //from 0 to 10
-        console.log(num)
         return num;
     };
 

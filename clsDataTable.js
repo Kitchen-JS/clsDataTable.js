@@ -287,13 +287,13 @@ class clsDataTable
 
     revertJsonData()
     {
-        this.jsonData = this.jsonDataOriginal;
-
-        this.update();
+        this.setJsonData(this.jsonDataOriginal);
     }
 
     sortJsonData(key)
     {
+        // Need better sorting
+
         this.jsonData.sort((a, b) => 
         {
             let sortVal = -1;
@@ -309,12 +309,58 @@ class clsDataTable
             return 0;
         }, { numeric: true, sensitivity: 'base' } );
 
-        this.buildTable();
+        this.buildTable(this.jsonData);
     }
 
     applyFilters()
     {
-        console.log(this.filters)
+        //console.log(this.filters)
+
+        //this.jsonData
+        //this.filters
+        //console.log(this.keys)
+        //console.log(this.filters)
+
+        let newJsonData = JSON.parse(JSON.stringify(this.jsonData));
+
+        newJsonData = newJsonData.map((row) =>
+        {
+            // Check for column removal
+            this.keys.forEach((key) =>
+            {
+                if(!this.filters[key].show)
+                {
+                    delete row[key];
+                    return;
+                }
+            });
+            return row;
+        });
+
+        // Apply filters on rows based on cell value
+        // this.keys.forEach((key) =>
+        // {
+        //     if(this.filters[key].value.length > 0)
+        //     {
+        //         newJsonData = newJsonData.map((row) =>
+        //         {
+        //             let found = false;
+        //             if(typeof row[key] !== 'undefined' && row[key].toString().indexOf(this.filters[key].value))
+        //             {
+        //                 found = true;
+        //             }
+
+        //             if(found)
+        //             {
+        //                 return row;
+        //             }
+        //         });
+        //     }
+        // });
+
+        console.log(newJsonData)
+
+        this.buildTable(newJsonData);
     }
 
     searchJsonData(val)
@@ -366,10 +412,10 @@ class clsDataTable
             });
         }
 
-        this.buildTable();
+        this.buildTable(this.jsonData);
     }
 
-    buildTable()
+    buildTable(jsonData)
     {
         this.buildEmptyTable();
 
@@ -392,6 +438,11 @@ class clsDataTable
         let colCtr=0;
         this.keys.forEach((key) =>
         {
+            if(!this.filters[key].show)
+            {
+                return;
+            }
+
             let col = document.createElement('div');
             col.classList.add('table-cell', 'p-1', 'border', 'border-slate');
 
@@ -463,7 +514,7 @@ class clsDataTable
             return Math.abs(n % 2) == 1;
         }
 
-        this.jsonData.forEach((row) => 
+        jsonData.forEach((row) => 
         {
             let rowEl = document.createElement('div');
             let rowIndex = 'row-' + rowctr;
@@ -693,6 +744,22 @@ class clsDataTable
         });
         titleRow.append(closeFilterUI);
 
+        let clearFilters = document.createElement('div');
+        clearFilters.classList.add('w-full');
+        let clearFiltersBtn = document.createElement('button');
+        clearFiltersBtn.classList.add('border', 'rounded', 'text-greyDark', 'text-center', 'bg-greyLite', 'p-1');
+        clearFiltersBtn.innerHTML = 'Clear Filters';
+        clearFiltersBtn.addEventListener('click', () =>
+        {
+            this.revertJsonData();
+
+            // this.filterUI.classList.add('hidden');
+            // window.removeEventListener('click', this.events.filterUIClickOffWindowEvent);
+            // this.filterUI.removeEventListener('click', this.events.filterUIClickOffUIEvent);
+        });
+        clearFilters.append(clearFiltersBtn);
+        titleRow.append(clearFilters);
+
         this.filterUI.append(titleRow);
 
         let colHeadRow = document.createElement('div');
@@ -725,7 +792,7 @@ class clsDataTable
 
             let keyEl = document.createElement('span');
             keyEl.classList.add('inline-block', 'w-2/12', 'align-middle');
-            keyEl.innerHTML = `${key}: `;
+            keyEl.innerHTML = `${key}:&nbsp;`;
             filterRow.append(keyEl);
 
             let input = document.createElement('input');
@@ -928,7 +995,6 @@ class clsDataTable
 
             return tab;
         }
-
     }
 
     export(type)
@@ -1002,6 +1068,22 @@ class clsDataTable
         html = html.replace('▲', '');
         html = html.replace('▼', '');
         return html;
+    }
+
+    toBinary(string)
+    {
+        const codeUnits = Uint16Array.from(
+            { length: string.length },
+            (element, index) => string.charCodeAt(index)
+        );
+        const charCodes = new Uint8Array(codeUnits.buffer);
+
+        let result = '';
+        charCodes.forEach((char) => 
+        {
+            result += String.fromCharCode(char);
+        });
+        return result;
     }
 
     randomID()
