@@ -53,6 +53,8 @@ class clsDataTable
         this.filters = {}; // Map of keys and filter values
         this.keys; // Keys defined for json object
 
+        this.events = {}; //Events that span the class but need to be removed after various instances in different locations within the class
+
         this.symbols = {}; //SVG drawings for UI 
 
         this.initialize();
@@ -90,6 +92,17 @@ class clsDataTable
         this.symbols.printer.src      +=   '<svg xmlns="http://www.w3.org/2000/svg" width="2.835" height="2.835" fill="DimGray"><path d="M2.986.962H2.59V1.39H.243V.963h-.396c-.117 0-.211.074-.211.164V2.106h.51v-.312h.158v.946c0 .054.041.096.094.096h2.039a.094.094 0 00.095-.096v-.946h.154v.311H3.2v-.979c-.002-.089-.097-.164-.214-.164zM2.09 2.373H.761c-.043 0-.08-.027-.08-.063s.037-.062.08-.062H2.09c.043 0 .079.026.079.062s-.036.063-.079.063zm0-.453H.761c-.043 0-.08-.028-.08-.062s.037-.062.08-.062H2.09c.043 0 .079.027.079.062 0 .034-.036.062-.079.062zm.818-.672a.092.092 0 01-.092-.092c0-.049.041-.09.092-.09s.091.041.091.09a.09.09 0 01-.091.092z"/><path d="M2.53.633a.11.11 0 00-.026-.067L1.965.029A.09.09 0 001.898 0h-1.5a.095.095 0 00-.096.095v1.236h2.229L2.53.633zM1.92.611L1.919.156l.477.455H1.92z"/></svg>';
         this.symbols.expand.src       +=   '<svg xmlns="http://www.w3.org/2000/svg" width="2.834" height="2.834" fill="DimGray"><path d="M2.711 0h-.693a.124.124 0 00-.124.123l.285.287-.343.344a.17.17 0 00-.053.125.179.179 0 00.303.125L2.429.66l.282.284A.124.124 0 002.834.82V.125A.124.124 0 002.711 0zM2.709 1.893l-.289.29-.351-.351a.177.177 0 00-.25 0 .174.174 0 000 .248l.351.351-.279.278c0 .067.057.123.123.123h.695a.125.125 0 00.125-.123v-.692a.124.124 0 00-.125-.124zM.66.408L.944.125A.124.124 0 00.82.002H.125A.125.125 0 000 .125v.692C0 .886.057.94.125.94L.41.656l.354.354c.033.035.079.052.125.052s.09-.017.125-.052a.177.177 0 000-.249L.66.408zM.873 1.713l-.463.465-.287-.287A.123.123 0 000 2.015v.696c0 .068.056.123.123.123h.693a.123.123 0 00.123-.123l-.281-.283.465-.465a.179.179 0 000-.25.179.179 0 00-.25 0z"/></svg>';
         this.symbols.magnify.src      +=   '<svg xmlns="http://www.w3.org/2000/svg" width="2.834" height="2.834" fill="Gray"><path d="M.291 1.693a.995.995 0 001.354.047l.179.18a.169.169 0 00.038.186l.677.679a.177.177 0 00.244 0 .176.176 0 000-.246l-.677-.676a.17.17 0 00-.186-.038l-.18-.18A.99.99 0 001.694.291a.99.99 0 00-1.403 0 .99.99 0 000 1.402zM.16.992A.83.83 0 011.582.404a.835.835 0 01-.59 1.422A.835.835 0 01.16.992z"/><path d="M.463 1.523A.748.748 0 10.994.244a.746.746 0 00-.75.748c0 .2.077.389.219.531zm.645.059a.04.04 0 01-.022.006.639.639 0 01-.5-.187.64.64 0 01-.163-.637.06.06 0 01.03-.033A.053.053 0 01.494.73a.062.062 0 01.01.003.055.055 0 01.031.062v.006a.514.514 0 00.131.517.521.521 0 00.406.152.057.057 0 01.06.045l.002.007-.001.022-.002.006-.006.015a.135.135 0 01-.017.017z"/></svg>';
+
+        this.events.filterUIClickOffWindowEvent = () =>
+        {
+            this.filterUI.classList.add('hidden');
+            window.removeEventListener('click', this.events.filterUIClickOffWindowEvent);
+            this.filterUI.removeEventListener('click', this.events.filterUIClickOffUIEvent);
+        };
+        this.events.filterUIClickOffUIEvent = (e) =>
+        {
+            e.stopPropagation();
+        };
     }
 
     /**
@@ -169,8 +182,12 @@ class clsDataTable
         this.filterBtns.append(this.symbols.paperclip);
         this.filterBtns.append(this.symbols.printer);
 
-        this.symbols.expand.setAttribute('expanded', false);
+        this.symbols.disk.addEventListener('click', () =>
+        {
+            this.export();
+        });
 
+        this.symbols.expand.setAttribute('expanded', false);
         this.symbols.expand.addEventListener('click', () =>
         {            
             if(this.symbols.expand.getAttribute('expanded') == 'false')
@@ -185,197 +202,14 @@ class clsDataTable
             }
         });
 
-        let filterUIClickOffWindowEvent = () =>
-        {
-            this.filterUI.classList.add('hidden');
-            window.removeEventListener('click', filterUIClickOffWindowEvent);
-            this.filterUI.removeEventListener('click', filterUIClickOffUIEvent);
-        };
-        let filterUIClickOffUIEvent = (e) =>
-        {
-            e.stopPropagation();
-        };
-
         this.symbols.printer.addEventListener('click', () =>
         {
-            // Get all other elements not in same root chain (siblings) in order to hide them
-            let parents = [];
-            parents.push(this.container.parent);
-            let otherElements = [];
-
-            let crawlParentChild = (el) =>
-            {
-                let parent = el.parentNode;
-                parents.push(parent);
-                
-                let sibling  = parent.firstChild;
-
-                while(sibling)
-                {
-                    if (sibling.nodeType === 1 && sibling !== this.container && parents.indexOf(sibling) <= -1 && !sibling.classList.contains('hidden') && sibling.nodeName !== 'SCRIPT') 
-                    {
-                        otherElements.push(sibling);
-                    }
-
-                    sibling = sibling.nextSibling;
-                }
-
-                if(parent.nodeName !== 'BODY')
-                {
-                    crawlParentChild(parent);
-                }
-            }
-
-            crawlParentChild(this.container);
-
-            // Hide other elements
-            otherElements.forEach((el) =>
-            {
-                el.classList.add('hidden');
-            });
-
-            this.filterBtns.classList.add('hidden');
-
-            let colSort = this.table.querySelectorAll('.column-sort');
-
-            colSort.forEach((col) =>
-            {
-                col.classList.add('hidden');
-            });
-
-            // unHide other elements
-            let afterPrint = (e) =>
-            {
-                otherElements.forEach((el) =>
-                {
-                    el.classList.remove('hidden');
-                });
-
-                this.filterBtns.classList.remove('hidden');
-
-                colSort.forEach((col) =>
-                {
-                    col.classList.remove('hidden');
-                });
-
-                window.removeEventListener('afterprint', afterPrint);
-            };
-
-            window.addEventListener('afterprint', afterPrint);
-
-            window.print();
+            this.print();
         });
 
         this.symbols.filter.addEventListener('click', () =>
         {
-            Array.from(this.filterUI.querySelectorAll('*')).forEach((el) =>
-            {
-                el.remove();
-            });
-
-            let titleRow = document.createElement('div');
-            titleRow.classList.add('w-full', 'mb-3');
-
-            let title = document.createElement('div');
-            title.classList.add('inline-block', 'font-bold', 'text-lg', 'w-8/12');
-            title.innerHTML = 'Filters';
-            titleRow.append(title);
-
-            let closeFilterUI = document.createElement('button');
-            closeFilterUI.classList.add('inline-block', 'border', 'rounded', 'text-greyDark', 'text-center', 'bg-greyLite', 'h-full', 'ml-1', 'font-bold', 'w-6', 'float-right');
-            closeFilterUI.innerHTML = 'X';
-            closeFilterUI.addEventListener('click', () =>
-            {
-                this.filterUI.classList.add('hidden');
-                window.removeEventListener('click', filterUIClickOffWindowEvent);
-                this.filterUI.removeEventListener('click', filterUIClickOffUIEvent);
-            });
-            titleRow.append(closeFilterUI);
-
-            this.filterUI.append(titleRow);
-
-            let colHeadRow = document.createElement('div');
-            colHeadRow.classList.add('w-full', 'mb-3', 'font-bold');
-
-            let chrc1 = document.createElement('div');
-            chrc1.classList.add('w-2/12', 'text-left', 'inline-block', 'underline');
-            chrc1.innerHTML = 'Col';
-            let chrc2 = document.createElement('div');
-            chrc2.classList.add('w-5/12', 'text-center', 'inline-block', 'underline');
-            chrc2.innerHTML = 'Filter';
-            let chrc3 = document.createElement('div');
-            chrc3.classList.add('w-1/12', 'text-center', 'inline-block', 'underline');
-            chrc3.innerHTML = 'Clr';
-            let chrc4 = document.createElement('div');
-            chrc4.classList.add('w-4/12', 'text-right', 'inline-block', 'underline');
-            chrc4.innerHTML = '+/-&nbsp;';
-            
-            colHeadRow.append(chrc1, chrc2, chrc3, chrc4);
-
-            this.filterUI.append(colHeadRow);
-
-            Object.keys(this.filters).forEach((key) =>
-            {
-                let filterContainer = document.createElement('div');
-                filterContainer.classList.add('block');
-
-                let filterRow = document.createElement('div');
-                filterRow.classList.add('w-full', 'mb-2', 'align-middle');
-
-                let keyEl = document.createElement('span');
-                keyEl.classList.add('inline-block', 'w-2/12', 'align-middle');
-                keyEl.innerHTML = `${key}: `;
-                filterRow.append(keyEl);
-
-                let input = document.createElement('input');
-                input.type = 'text';
-                input.classList.add('w-5/12');
-                input.classList.add('bg-transparent', 'inline-block', 'h-7', 'border', 'border-slate', 'rounded-md', 'sm:text-sm', 'focus:border-greyLite', 'p-1', 'pl-6', 'shadow-sm', 'placeholder-slate', 'focus:outline-none', 'align-middle');
-                input.value = this.filters[key].value;
-                input.addEventListener('keyup', () =>
-                {
-                    this.filters[key].value = input.value;
-
-                    this.applyFilters();
-                });
-                filterRow.append(input);
-
-                let clear = document.createElement('button');
-                clear.classList.add('inline-block', 'border', 'rounded', 'text-greyDark', 'bg-greyLite', 'h-full', 'ml-1', 'w-5', 'font-bold', 'align-middle');
-                clear.innerHTML = 'X'
-                clear.addEventListener('click', () =>
-                {
-                    input.value = '';
-                    this.filters[key].value = '';
-
-                    this.applyFilters();
-                });
-                filterRow.append(clear);
-
-                let showCol = document.createElement('input');
-                showCol.type = 'checkbox';
-                showCol.classList.add('bg-transparent', 'inline', 'h-7', 'border', 'border-slate', 'rounded-md', 'sm:text-sm', 'p-1', 'pl-6', 'shadow-sm', 'placeholder-slate', 'float-right', 'align-middle');
-                showCol.classList.add('focus:border-greyLite', 'focus:checked:border-greyLite', 'focus:border-greyLite', 'focus:outline-none');
-                showCol.classList.add('checked:bg-slate', 'focus:bg-white', 'focus:checked:bg-slate', 'focus-visible:bg-white', 'focus-visible:checked:bg-slate', 'hover:border-greyLite', 'hover:bg-black', 'hover:checked:bg-black');
-                showCol.checked = this.filters[key].show;
-                showCol.addEventListener('change', () =>
-                {
-                    this.filters[key].show = showCol.checked;
-
-                    this.applyFilters();
-                });
-                filterRow.append(showCol);
-
-                this.filterUI.append(filterRow);
-
-                setTimeout(() =>
-                {
-                    window.addEventListener('click', filterUIClickOffWindowEvent);
-                    this.filterUI.addEventListener('click', filterUIClickOffUIEvent);
-                }, 800);
-            });
-
-            this.filterUI.classList.toggle('hidden');          
+            this.filterUIPopup();
         });
 
         let searchBox = document.createElement('div');
@@ -658,11 +492,33 @@ class clsDataTable
                 // KeyMap Render Function
                 if(this.keyMap && this.keyMap[key] && this.keyMap[key].render)
                 {
-                    colEl.innerHTML = this.keyMap[key].render(colEl.innerHTML);
+                    let data = colEl.innerHTML;
+                    colEl.innerHTML = '';
+
+                    let val = this.keyMap[key].render(data);
+                    if(typeof val === 'object')
+                    {
+                        colEl.append(val);
+                    }
+                    else
+                    {
+                        colEl.innerHTML = val;
+                    }
                 }
                 else if(this.keyMap && this.keyMap[colCtr] && this.keyMap[colCtr].render)
                 {
-                    colEl.innerHTML = this.keyMap[colCtr].render(colEl.innerHTML);
+                    let data = colEl.innerHTML;
+                    colEl.innerHTML = '';
+
+                    let val = this.keyMap[colCtr].render(data);
+                    if(typeof val === 'object')
+                    {
+                        colEl.append(val);
+                    }
+                    else
+                    {
+                        colEl.innerHTML = val;
+                    }
                 }
 
                 //Col Class
@@ -722,6 +578,212 @@ class clsDataTable
         });
 
         this.table.append(rowGroup);
+    }
+
+    print()
+    {
+        // Get all other elements not in same root chain (siblings) in order to hide them
+        let parents = [];
+        parents.push(this.container.parent);
+        let otherElements = [];
+
+        let crawlParentChild = (el) =>
+        {
+            let parent = el.parentNode;
+            parents.push(parent);
+            
+            let sibling  = parent.firstChild;
+
+            while(sibling)
+            {
+                if (sibling.nodeType === 1 && sibling !== this.container && parents.indexOf(sibling) <= -1 && !sibling.classList.contains('hidden') && sibling.nodeName !== 'SCRIPT') 
+                {
+                    otherElements.push(sibling);
+                }
+
+                sibling = sibling.nextSibling;
+            }
+
+            if(parent.nodeName !== 'BODY')
+            {
+                crawlParentChild(parent);
+            }
+        }
+
+        crawlParentChild(this.container);
+
+        // Hide other elements
+        otherElements.forEach((el) =>
+        {
+            el.classList.add('hidden');
+        });
+
+        this.filterBtns.classList.add('hidden');
+
+        let colSort = this.table.querySelectorAll('.column-sort');
+
+        colSort.forEach((col) =>
+        {
+            col.classList.add('hidden');
+        });
+
+        // unHide other elements
+        let afterPrint = (e) =>
+        {
+            otherElements.forEach((el) =>
+            {
+                el.classList.remove('hidden');
+            });
+
+            this.filterBtns.classList.remove('hidden');
+
+            colSort.forEach((col) =>
+            {
+                col.classList.remove('hidden');
+            });
+
+            window.removeEventListener('afterprint', afterPrint);
+        };
+
+        window.addEventListener('afterprint', afterPrint);
+
+        window.print();
+    }
+
+    filterUIPopup()
+    {
+        Array.from(this.filterUI.querySelectorAll('*')).forEach((el) =>
+        {
+            el.remove();
+        });
+
+        let titleRow = document.createElement('div');
+        titleRow.classList.add('w-full', 'mb-3');
+
+        let title = document.createElement('div');
+        title.classList.add('inline-block', 'font-bold', 'text-lg', 'w-8/12');
+        title.innerHTML = 'Filters';
+        titleRow.append(title);
+
+        let closeFilterUI = document.createElement('button');
+        closeFilterUI.classList.add('inline-block', 'border', 'rounded', 'text-greyDark', 'text-center', 'bg-greyLite', 'h-full', 'ml-1', 'font-bold', 'w-6', 'float-right');
+        closeFilterUI.innerHTML = 'X';
+        closeFilterUI.addEventListener('click', () =>
+        {
+            this.filterUI.classList.add('hidden');
+            window.removeEventListener('click', this.events.filterUIClickOffWindowEvent);
+            this.filterUI.removeEventListener('click', this.events.filterUIClickOffUIEvent);
+        });
+        titleRow.append(closeFilterUI);
+
+        this.filterUI.append(titleRow);
+
+        let colHeadRow = document.createElement('div');
+        colHeadRow.classList.add('w-full', 'mb-3', 'font-bold');
+
+        let chrc1 = document.createElement('div');
+        chrc1.classList.add('w-2/12', 'text-left', 'inline-block', 'underline');
+        chrc1.innerHTML = 'Col';
+        let chrc2 = document.createElement('div');
+        chrc2.classList.add('w-5/12', 'text-center', 'inline-block', 'underline');
+        chrc2.innerHTML = 'Filter';
+        let chrc3 = document.createElement('div');
+        chrc3.classList.add('w-1/12', 'text-center', 'inline-block', 'underline');
+        chrc3.innerHTML = 'Clr';
+        let chrc4 = document.createElement('div');
+        chrc4.classList.add('w-4/12', 'text-right', 'inline-block', 'underline');
+        chrc4.innerHTML = '+/-&nbsp;';
+        
+        colHeadRow.append(chrc1, chrc2, chrc3, chrc4);
+
+        this.filterUI.append(colHeadRow);
+
+        Object.keys(this.filters).forEach((key) =>
+        {
+            let filterContainer = document.createElement('div');
+            filterContainer.classList.add('block');
+
+            let filterRow = document.createElement('div');
+            filterRow.classList.add('w-full', 'mb-2', 'align-middle');
+
+            let keyEl = document.createElement('span');
+            keyEl.classList.add('inline-block', 'w-2/12', 'align-middle');
+            keyEl.innerHTML = `${key}: `;
+            filterRow.append(keyEl);
+
+            let input = document.createElement('input');
+            input.type = 'text';
+            input.classList.add('w-5/12');
+            input.classList.add('bg-transparent', 'inline-block', 'h-7', 'border', 'border-slate', 'rounded-md', 'sm:text-sm', 'focus:border-greyLite', 'p-1', 'pl-6', 'shadow-sm', 'placeholder-slate', 'focus:outline-none', 'align-middle');
+            input.value = this.filters[key].value;
+            input.addEventListener('keyup', () =>
+            {
+                this.filters[key].value = input.value;
+
+                this.applyFilters();
+            });
+            filterRow.append(input);
+
+            let clear = document.createElement('button');
+            clear.classList.add('inline-block', 'border', 'rounded', 'text-greyDark', 'bg-greyLite', 'h-full', 'ml-1', 'w-5', 'font-bold', 'align-middle');
+            clear.innerHTML = 'X'
+            clear.addEventListener('click', () =>
+            {
+                input.value = '';
+                this.filters[key].value = '';
+
+                this.applyFilters();
+            });
+            filterRow.append(clear);
+
+            let showCol = document.createElement('input');
+            showCol.type = 'checkbox';
+            showCol.classList.add('bg-transparent', 'inline', 'h-7', 'border', 'border-slate', 'rounded-md', 'sm:text-sm', 'p-1', 'pl-6', 'shadow-sm', 'placeholder-slate', 'float-right', 'align-middle');
+            showCol.classList.add('focus:border-greyLite', 'focus:checked:border-greyLite', 'focus:border-greyLite', 'focus:outline-none');
+            showCol.classList.add('checked:bg-slate', 'focus:bg-white', 'focus:checked:bg-slate', 'focus-visible:bg-white', 'focus-visible:checked:bg-slate', 'hover:border-greyLite', 'hover:bg-black', 'hover:checked:bg-black');
+            showCol.checked = this.filters[key].show;
+            showCol.addEventListener('change', () =>
+            {
+                this.filters[key].show = showCol.checked;
+
+                this.applyFilters();
+            });
+            filterRow.append(showCol);
+
+            this.filterUI.append(filterRow);
+
+            setTimeout(() =>
+            {
+                window.addEventListener('click', this.events.filterUIClickOffWindowEvent);
+                this.filterUI.addEventListener('click', this.events.filterUIClickOffUIEvent);
+            }, 800);
+        });
+
+        this.filterUI.classList.toggle('hidden');  
+    }
+
+    export()
+    {
+        let keys = [];
+        Array.from(this.table.querySelectorAll('.table-header-group .table-cell')).forEach((headerCell) =>
+        {
+            keys.push(headerCell.innerHTML);
+        });
+
+        Array.from(this.table.querySelectorAll('.table-row-group .table-row')).forEach((row) =>
+        {
+            if(row.classList.contains('hidden'))
+            {
+                return;
+            }
+            
+            let cellCtr = 0;
+            Array.from(row.querySelectorAll('.table-cell')).forEach((cell) =>
+            {
+
+                cellCtr++;
+            });
+        });
     }
 
     randomID()

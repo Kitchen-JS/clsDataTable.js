@@ -47,7 +47,15 @@
                 maxwidth: '10rem',
                 render: (data) =>
                 {
-                    return 'foo';
+                    let btn = document.createElement('button');
+                    btn.innerHTML = 'Bob';
+                    btn.value = data;
+                    btn.addEventListener('click', () =>
+                    {
+                        console.log('Bob Button Pushed', btn.value);
+                    });
+
+                    return btn;
                 },
                 hidden: false
             },
