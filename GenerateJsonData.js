@@ -8,12 +8,14 @@
  */
 function GenerateJsonData(numCols, numRows, dType, rType)
 {
-    let randoTextArr = ["Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit", "Quisque eu lorem elementum", "Etiam in consequat", "Pellentesque", "tincidunt ex non est tempus", "vulputate", "feugiat", "fermentum", "massa", "porttitor", "libero", "tincidunt feugiat in vulputate nisl"];
+    let randoTextArr = ["Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit", "Quisque eu lorem elementum", "Etiam in consequat", "Pellentesque", "tincidunt ex non est tempus", "vulputate", "feugiat", "fermentum", "massa", "porttitor", "libero", "tincidunt feugiat in vulputate nisl", 1, 2, 0, 4, 5, 'a1', 'a2', 'a4'];
     randoTextArr.sort();
 
     const rand = () => 
     {
-        return Math.floor(Math.random() * 12); //from 0 to 10
+        let num = Math.floor(Math.random() * randoTextArr.length); //from 0 to 10
+        console.log(num)
+        return num;
     };
 
     let arr = 'a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z'.split(',');

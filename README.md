@@ -5,6 +5,15 @@ A class to build responsive tables that are populated with json data
 
 ![Preview](Preview.gif)
 
+## Features
+- Search
+- Sort
+- Handle values with function passed in such as adding a button
+- Exports as JSON, CSV, TSV
+- Copy table to clipboard
+- Full Screen / Projection of the Table
+- Print just the data
+
 ## Update CSS
 npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch **/
 

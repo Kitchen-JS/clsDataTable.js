@@ -307,7 +307,7 @@ class clsDataTable
                 return 1 * this.sortVal;
             }
             return 0;
-        });
+        }, { numeric: true, sensitivity: 'base' } );
 
         this.buildTable();
     }
