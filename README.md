@@ -9,6 +9,7 @@ A class to build responsive tables that are populated with json data
 - Search
 - Sort
 - Handle values with function passed in such as adding a button
+- Handles bothe keyed and unkeyed data sets
 - Exports as JSON, CSV, TSV
 - Copy table to clipboard
 - Full Screen / Projection of the Table
