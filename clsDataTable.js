@@ -53,9 +53,13 @@ class clsDataTable
         this.filters = {}; // Map of keys and filter values
         this.keys; // Keys defined for json object
 
+        this.sortObj = {}; //{Key: Direction:}
+
         this.events = {}; //Events that span the class but need to be removed after various instances in different locations within the class
 
         this.symbols = {}; //SVG drawings for UI 
+
+        this.minWidth = '380px';
 
         this.initialize();
     }
@@ -65,6 +69,8 @@ class clsDataTable
         this.id = this.randomID();
         this.container.id = this.id;
         this.container.classList.add('bg-white');
+
+        this.container.style.minWidth = this.minWidth;
 
         this.filterUI = document.createElement('div');
         this.filterUI.classList.add('p-4', 'block', 'absolute', 'bg-greyLite', 'z-9999', 'border', 'rounded', 'w-96', 'h-64', 'max-h-64', 'overflow-y-auto', 'top-10', 'left-44', 'hidden');
@@ -178,6 +184,7 @@ class clsDataTable
     {
         this.filterBtns = document.createElement('div');
         this.filterBtns.classList.add('w-full', 'block', 'text-xs', 'p-1', 'h-7');
+        this.filterBtns.style.minWidth = this.minWidth;
 
         this.filterBtns.append(this.symbols.filter);
         this.filterBtns.append(this.symbols.expand);
@@ -196,7 +203,7 @@ class clsDataTable
             navigator.clipboard.writeText(data);
 
             this.symbols.paperclip.classList.add('border-2', 'border-success', 'rounded', 'bg-success', 'text-success', 'underline');
-            this.symbols.paperclip
+            //this.symbols.paperclip
 
             setTimeout(() => 
             {
@@ -292,22 +299,26 @@ class clsDataTable
 
     sortJsonData(key)
     {
-        // Need better sorting
+        const compareStrings = (a, b) => 
+        {
+            // Assuming you want case-insensitive comparison
+            a = a.toString().toLowerCase();
+            b = b.toString().toLowerCase();
 
+            if(this.sortObj.direction === 'down')
+            {
+                return (a < b) ? -1 : (a > b) ? 1 : 0;
+            }
+            else
+            {
+                return (a < b) ? 1 : (a > b) ? -1 : 0;
+            }
+        };
+          
         this.jsonData.sort((a, b) => 
         {
-            let sortVal = -1;
-
-            if (a[key] < b[key]) 
-            {
-                return -1 * this.sortVal;
-            }
-            if (a[key] > b[key]) 
-            {
-                return 1 * this.sortVal;
-            }
-            return 0;
-        }, { numeric: true, sensitivity: 'base' } );
+            return compareStrings(a[key], b[key]);
+        });
 
         this.buildTable(this.jsonData);
     }
@@ -358,7 +369,7 @@ class clsDataTable
         //     }
         // });
 
-        console.log(newJsonData)
+        //console.log(newJsonData);
 
         this.buildTable(newJsonData);
     }
@@ -368,6 +379,7 @@ class clsDataTable
         Array.from(this.table.querySelectorAll('.table-row-group .table-row')).forEach((row) =>
         {
             let found = false;
+            
             Array.from(row.querySelectorAll('.table-cell')).forEach((cell) =>
             {
                 if(cell.innerHTML.indexOf(val) > -1)
@@ -485,9 +497,29 @@ class clsDataTable
                 sortUI.append(up);
                 sortUI.append(down);
 
-                sortUI.setAttribute('sortDirection', 'down');
+                //sortUI.setAttribute('sortDirection', 'down');
                 sortUI.addEventListener('click', () =>
                 {
+                    //this.sortObj = {}; //{key: direction:}
+                    if(typeof this.sortObj.key === 'undefined' || !this.sortObj.key)
+                    {
+                        this.sortObj.key = key;
+                        this.sortObj.direction = 'down';
+                    }
+                    else if(this.sortObj.key !== key)
+                    {
+                        this.sortObj.key = key;
+                        this.sortObj.direction = 'down';
+                    }
+                    else if(this.sortObj.direction === 'up')
+                    {
+                        this.sortObj.direction = 'down';
+                    }
+                    else if(this.sortObj.direction === 'down')
+                    {
+                        this.sortObj.direction = 'up';
+                    }
+
                     this.sortJsonData(key);
 
                     this.sortVal = this.sortVal * -1 ;
@@ -522,7 +554,7 @@ class clsDataTable
 
             if(this.options.altRowColor && rowctr > 0 && isOdd(rowctr))
             {
-                rowEl.classList.add('bg-altRowBlueLite');
+                rowEl.classList.add('bg-altRowGreyLite');
             }
 
             if(typeof this.options.rowHeight !== 'undefined' && this.options.rowHeight)
@@ -739,8 +771,11 @@ class clsDataTable
         closeFilterUI.addEventListener('click', () =>
         {
             this.filterUI.classList.add('hidden');
-            window.removeEventListener('click', this.events.filterUIClickOffWindowEvent);
-            this.filterUI.removeEventListener('click', this.events.filterUIClickOffUIEvent);
+            setTimeout(() => 
+            {
+                window.removeEventListener('click', this.events.filterUIClickOffWindowEvent);
+                this.filterUI.removeEventListener('click', this.events.filterUIClickOffUIEvent);
+            }, 500);
         });
         titleRow.append(closeFilterUI);
 
@@ -751,11 +786,14 @@ class clsDataTable
         clearFiltersBtn.innerHTML = 'Clear Filters';
         clearFiltersBtn.addEventListener('click', () =>
         {
-            this.revertJsonData();
+            this.filterUI.classList.toggle('hidden');
+            setTimeout(() => 
+            {
+                window.removeEventListener('click', this.events.filterUIClickOffWindowEvent);
+                this.filterUI.removeEventListener('click', this.events.filterUIClickOffUIEvent);
+            }, 500);
 
-            // this.filterUI.classList.add('hidden');
-            // window.removeEventListener('click', this.events.filterUIClickOffWindowEvent);
-            // this.filterUI.removeEventListener('click', this.events.filterUIClickOffUIEvent);
+            this.revertJsonData();
         });
         clearFilters.append(clearFiltersBtn);
         titleRow.append(clearFilters);
@@ -798,6 +836,7 @@ class clsDataTable
             let input = document.createElement('input');
             input.type = 'text';
             input.classList.add('w-5/12');
+            input.classList.add('hidden');
             input.classList.add('bg-transparent', 'inline-block', 'h-7', 'border', 'border-slate', 'rounded-md', 'sm:text-sm', 'focus:border-greyLite', 'p-1', 'pl-6', 'shadow-sm', 'placeholder-slate', 'focus:outline-none', 'align-middle');
             input.value = this.filters[key].value;
             input.addEventListener('keyup', () =>
@@ -810,6 +849,7 @@ class clsDataTable
 
             let clear = document.createElement('button');
             clear.classList.add('inline-block', 'border', 'rounded', 'text-greyDark', 'bg-greyLite', 'h-full', 'ml-1', 'w-5', 'font-bold', 'align-middle');
+            clear.classList.add('hidden');
             clear.innerHTML = 'X'
             clear.addEventListener('click', () =>
             {
