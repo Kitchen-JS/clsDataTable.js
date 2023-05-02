@@ -36,6 +36,16 @@ class clsDataTable
             options.sort = true;
         }
         this.sortVal = 1;
+        
+        if(typeof options.freezeHeader === 'undefined')
+        {
+            options.freezeHeader = false;
+        }
+
+        if(typeof options.includeFooter === 'undefined')
+        {
+            options.includeFooter = false;
+        }
 
         this.options = options || {};
 
@@ -445,6 +455,11 @@ class clsDataTable
         // Table Header
         let header = document.createElement('div');
         header.classList.add('table-header-group', 'bg-greyLite');
+        if(this.options.freezeHeader)
+        {
+            this.table.classList.add('text-left', 'relative');
+            header.classList.add('sticky', 'top-0');
+        }
         let headerRow = document.createElement('div');
         headerRow.classList.add('table-row');
         let colCtr=0;
@@ -678,6 +693,21 @@ class clsDataTable
         });
 
         this.table.append(rowGroup);
+
+        if(this.options.includeFooter)
+        {
+            let footer = document.createElement('div');
+            footer.classList.add('table-header-group', 'bg-greyLite');
+            footer.append(headerRow.cloneNode(true));
+            Array.from(footer.querySelectorAll('*')).forEach((el) =>
+            {
+                if(el.classList.contains('column-sort'))
+                {
+                    el.remove();
+                }
+            });
+            this.table.append(footer);
+        }
     }
 
     print()

@@ -28,6 +28,8 @@ let dt = new clsDataTable(
         container: document.querySelector('.cntr'),
         altRowColor: true,
         sort: true,
+        freezeHeader: false,
+        includeFooter: false,
         // rowHeight: '10rem',
         // rowHeightMin: '10rem',
         // rowHeightMax: '10rem',
