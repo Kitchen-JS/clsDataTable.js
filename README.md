@@ -16,7 +16,7 @@ A class to build responsive tables that are populated with json data
 - Print just the data
 
 ## Update CSS
-npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch **/
+npx tailwindcss -i ./src/input.css -o ./dist/clsDataTable.css --watch **/
 
 ### Usage
 ```

@@ -77,13 +77,13 @@ class clsDataTable
     initialize()
     {
         this.id = this.randomID();
-        this.container.id = this.id;
-        this.container.classList.add('bg-white');
+        this.container.id = this.id || this.randomID();
+        this.container.classList.add('clsDataTableContainer');
 
         this.container.style.minWidth = this.minWidth;
 
         this.filterUI = document.createElement('div');
-        this.filterUI.classList.add('p-4', 'block', 'absolute', 'bg-greyLite', 'z-9999', 'border', 'rounded', 'w-96', 'h-64', 'max-h-64', 'overflow-y-auto', 'top-10', 'left-44', 'hidden');
+        this.filterUI.classList.add('filterUI', 'kw-hidden');
         this.container.append(this.filterUI);
 
         this.symbols.filter = '';
@@ -99,7 +99,7 @@ class clsDataTable
         {
             this.symbols[key] = document.createElement('img');
             this.symbols[key].src = dataStr;
-            this.symbols[key].classList.add('w-5', 'h-5', 'mr-3', 'inline-block', 'align-bottom', 'cursor-pointer');
+            this.symbols[key].classList.add('toolbar-button');
         });
 
         this.symbols.filter.src       +=   '<svg xmlns="http://www.w3.org/2000/svg" width="2.835" height="2.835" fill="DimGray"><path d="M2.803.042A.087.087 0 002.729 0H.104a.08.08 0 00-.071.042.084.084 0 000 .084L1.075 1.93l-.002.04v.517c0 .041.023.08.061.1l.469.237a.116.116 0 00.051.012.114.114 0 00.112-.113V1.97c0-.014 0-.026-.002-.04L2.807.126a.103.103 0 00-.004-.084z"/></svg>';
@@ -114,7 +114,7 @@ class clsDataTable
 
         this.events.filterUIClickOffWindowEvent = () =>
         {
-            this.filterUI.classList.add('hidden');
+            this.filterUI.classList.add('kw-hidden');
             window.removeEventListener('click', this.events.filterUIClickOffWindowEvent);
             this.filterUI.removeEventListener('click', this.events.filterUIClickOffUIEvent);
         };
@@ -275,7 +275,7 @@ class clsDataTable
             searchInput.value = '';
             Array.from(this.table.querySelectorAll('.table-row-group .table-row')).forEach((row) =>
             {
-                row.classList.remove('hidden');
+                row.classList.remove('kw-hidden');
             });
         });
         searchBox.append(searchCancelBtn);
@@ -297,7 +297,7 @@ class clsDataTable
         }
 
         this.table = document.createElement('div');
-        this.table.classList.add('table', 'box-border', 'w-full', 'border', 'border-slate');
+        this.table.classList.add('table');
 
         this.container.append(this.table);
     }
@@ -400,11 +400,11 @@ class clsDataTable
 
             if(!found)
             {
-                row.classList.add('hidden');
+                row.classList.add('kw-hidden');
             }
             else
             {
-                row.classList.remove('hidden');
+                row.classList.remove('kw-hidden');
             }
         });
     }
@@ -443,10 +443,10 @@ class clsDataTable
 
         if(typeof this.keys === 'undefined' || !this.keys || this.keys.length === 0)
         {
-            this.table.innerHTML = `<h1 class="bg-greyLite border border-slate text-center text-xl font-bold p-4">&nbsp;</h1>
-            <div class="table-row-group border border-slate">
-                <div class="table-row border border-slate">
-                    <h1 class="text-center border border-slate text-xl font-bold p-4">No Results</h1>
+            this.table.innerHTML = `<h1 class="">&nbsp;</h1>
+            <div class="table-row-group">
+                <div class="table-row">
+                    <div class="no-results">No Results</div>
                 </div>
             </div>`;
             return;
@@ -454,11 +454,10 @@ class clsDataTable
 
         // Table Header
         let header = document.createElement('div');
-        header.classList.add('table-header-group', 'bg-greyLite');
+        header.classList.add('table-header-group');
         if(this.options.freezeHeader)
         {
-            this.table.classList.add('text-left', 'relative');
-            header.classList.add('sticky', 'top-0');
+            header.classList.add('sticky-header');
         }
         let headerRow = document.createElement('div');
         headerRow.classList.add('table-row');
@@ -471,7 +470,7 @@ class clsDataTable
             }
 
             let col = document.createElement('div');
-            col.classList.add('table-cell', 'p-1', 'border', 'border-slate');
+            col.classList.add('table-cell');
 
             // KeyMap Title
             if(this.keyMap && this.keyMap[key] && this.keyMap[key].title)
@@ -490,23 +489,21 @@ class clsDataTable
             // KeyMap Hidden
             if(this.keyMap && this.keyMap[key] && this.keyMap[key].hidden)
             {
-                col.classList.add('hidden');
+                col.classList.add('kw-hidden');
             }
             else if(this.keyMap && this.keyMap[colCtr] && this.keyMap[colCtr].hidden)
             {
-                col.classList.add('hidden');
+                col.classList.add('kw-hidden');
             }
 
             if(this.options.sort)
             {
                 let sortUI = document.createElement('span');
-                sortUI.classList.add('column-sort', 'float-right', 'text-xs', 'cursor-pointer', 'text-greyDark');
+                sortUI.classList.add('column-sort');
                 
                 let up = document.createElement('div');
-                up.classList.add('block', 'leading-none');
                 up.innerHTML = '▲';
                 let down = document.createElement('div');
-                down.classList.add('block', 'leading-none');
                 down.innerHTML = '▼';
 
                 sortUI.append(up);
@@ -565,7 +562,7 @@ class clsDataTable
         {
             let rowEl = document.createElement('div');
             let rowIndex = 'row-' + rowctr;
-            rowEl.classList.add('table-row', 'break-inside-avoid', rowIndex);
+            rowEl.classList.add('table-row', rowIndex);
 
             if(this.options.altRowColor && rowctr > 0 && isOdd(rowctr))
             {
@@ -593,7 +590,7 @@ class clsDataTable
 
                 let key;
                 let colEl = document.createElement('div');
-                colEl.classList.add('table-cell', 'p-1', 'border', 'border-greyLite', 'border-slate');
+                colEl.classList.add('table-cell');
                 if(typeof col === 'object')
                 {
                     key = Object.keys(col)[0];
@@ -643,11 +640,11 @@ class clsDataTable
                 // KeyMap Hidden
                 if(this.keyMap && this.keyMap[rowKey] && this.keyMap[rowKey].hidden)
                 {
-                    colEl.classList.add('hidden');
+                    colEl.classList.add('kw-hidden');
                 }
                 else if(this.keyMap && this.keyMap[colCtr] && this.keyMap[colCtr].hidden)
                 {
-                    colEl.classList.add('hidden');
+                    colEl.classList.add('kw-hidden');
                 }
 
                 //Col Width
@@ -697,7 +694,7 @@ class clsDataTable
         if(this.options.includeFooter)
         {
             let footer = document.createElement('div');
-            footer.classList.add('table-header-group', 'bg-greyLite');
+            footer.classList.add('table-header-group');
             footer.append(headerRow.cloneNode(true));
             Array.from(footer.querySelectorAll('*')).forEach((el) =>
             {
@@ -726,7 +723,7 @@ class clsDataTable
 
             while(sibling)
             {
-                if (sibling.nodeType === 1 && sibling !== this.container && parents.indexOf(sibling) <= -1 && !sibling.classList.contains('hidden') && sibling.nodeName !== 'SCRIPT') 
+                if (sibling.nodeType === 1 && sibling !== this.container && parents.indexOf(sibling) <= -1 && !sibling.classList.contains('kw-hidden') && sibling.nodeName !== 'SCRIPT') 
                 {
                     otherElements.push(sibling);
                 }
@@ -745,16 +742,16 @@ class clsDataTable
         // Hide other elements
         otherElements.forEach((el) =>
         {
-            el.classList.add('hidden');
+            el.classList.add('kw-hidden');
         });
 
-        this.filterBtns.classList.add('hidden');
+        this.filterBtns.classList.add('kw-hidden');
 
         let colSort = this.table.querySelectorAll('.column-sort');
 
         colSort.forEach((col) =>
         {
-            col.classList.add('hidden');
+            col.classList.add('kw-hidden');
         });
 
         // unHide other elements
@@ -762,14 +759,14 @@ class clsDataTable
         {
             otherElements.forEach((el) =>
             {
-                el.classList.remove('hidden');
+                el.classList.remove('kw-hidden');
             });
 
-            this.filterBtns.classList.remove('hidden');
+            this.filterBtns.classList.remove('kw-hidden');
 
             colSort.forEach((col) =>
             {
-                col.classList.remove('hidden');
+                col.classList.remove('kw-hidden');
             });
 
             window.removeEventListener('afterprint', afterPrint);
@@ -788,10 +785,10 @@ class clsDataTable
         });
 
         let titleRow = document.createElement('div');
-        titleRow.classList.add('w-full', 'mb-3');
+        titleRow.classList.add('titleRow', 'w-full', 'mb-3');
 
         let title = document.createElement('div');
-        title.classList.add('inline-block', 'font-bold', 'text-lg', 'w-8/12');
+        title.classList.add('title', 'inline-block', 'font-bold', 'text-lg', 'w-8/12');
         title.innerHTML = 'Filters';
         titleRow.append(title);
 
@@ -800,7 +797,7 @@ class clsDataTable
         closeFilterUI.innerHTML = 'X';
         closeFilterUI.addEventListener('click', () =>
         {
-            this.filterUI.classList.add('hidden');
+            this.filterUI.classList.add('kw-hidden');
             setTimeout(() => 
             {
                 window.removeEventListener('click', this.events.filterUIClickOffWindowEvent);
@@ -816,7 +813,7 @@ class clsDataTable
         clearFiltersBtn.innerHTML = 'Clear Filters';
         clearFiltersBtn.addEventListener('click', () =>
         {
-            this.filterUI.classList.toggle('hidden');
+            this.filterUI.classList.toggle('kw-hidden');
             setTimeout(() => 
             {
                 window.removeEventListener('click', this.events.filterUIClickOffWindowEvent);
@@ -866,7 +863,7 @@ class clsDataTable
             let input = document.createElement('input');
             input.type = 'text';
             input.classList.add('w-5/12');
-            input.classList.add('hidden');
+            input.classList.add('kw-hidden');
             input.classList.add('bg-transparent', 'inline-block', 'h-7', 'border', 'border-slate', 'rounded-md', 'sm:text-sm', 'focus:border-greyLite', 'p-1', 'pl-6', 'shadow-sm', 'placeholder-slate', 'focus:outline-none', 'align-middle');
             input.value = this.filters[key].value;
             input.addEventListener('keyup', () =>
@@ -879,7 +876,7 @@ class clsDataTable
 
             let clear = document.createElement('button');
             clear.classList.add('inline-block', 'border', 'rounded', 'text-greyDark', 'bg-greyLite', 'h-full', 'ml-1', 'w-5', 'font-bold', 'align-middle');
-            clear.classList.add('hidden');
+            clear.classList.add('kw-hidden');
             clear.innerHTML = 'X'
             clear.addEventListener('click', () =>
             {
@@ -913,7 +910,7 @@ class clsDataTable
             }, 800);
         });
 
-        this.filterUI.classList.toggle('hidden');  
+        this.filterUI.classList.toggle('kw-hidden');  
     }
 
     handleExport()
@@ -981,7 +978,7 @@ class clsDataTable
         let keys = [];
         Array.from(this.table.querySelectorAll('.table-header-group .table-cell')).forEach((headerCell) =>
         {
-            if(headerCell.classList.contains('hidden'))
+            if(headerCell.classList.contains('kw-hidden'))
             {
                 return;
             }
@@ -993,7 +990,7 @@ class clsDataTable
 
         Array.from(this.table.querySelectorAll('.table-row-group .table-row')).forEach((row) =>
         {
-            if(row.classList.contains('hidden'))
+            if(row.classList.contains('kw-hidden'))
             {
                 return;
             }
@@ -1003,7 +1000,7 @@ class clsDataTable
             let cellCtr = 0;
             Array.from(row.querySelectorAll('.table-cell')).forEach((cell) =>
             {
-                if(cell.classList.contains('hidden'))
+                if(cell.classList.contains('kw-hidden'))
                 {
                     return;
                 }

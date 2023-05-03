@@ -1,3 +1,58 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.kw-hidden
+{
+    display: none !important;
+}
+
+.clsDataTableContainer
+{
+    @apply bg-white;
+}
+.clsDataTableContainer .filterUI
+{
+    @apply p-4 bg-greyLite absolute z-9999 border rounded w-96 h-64 max-h-64 overflow-y-auto top-10 left-44 block;
+}
+.clsDataTableContainer .toolbar-button
+{
+    @apply w-5 h-5 mr-3 inline-block align-bottom cursor-pointer;
+}
+.clsDataTableContainer .table
+{
+    @apply box-border w-full border border-slate text-left relative;
+}
+.clsDataTableContainer .table .table-header-group
+{
+    @apply bg-greyLite;
+}
+.clsDataTableContainer .table .table-header-group.sticky-header
+{
+    @apply sticky top-0;
+}
+.clsDataTableContainer .table .table-row
+{
+    @apply break-inside-avoid border border-slate;
+}
+.clsDataTableContainer .table .table-cell
+{
+    @apply p-1 border border-slate;
+}
+.clsDataTableContainer .table .column-sort
+{
+    @apply float-right text-xs cursor-pointer text-greyDark;
+}
+.clsDataTableContainer .table .column-sort div
+{
+    @apply block leading-none;
+}
+.clsDataTableContainer .table .table-row-group
+{
+    @apply border border-slate;
+}
+.clsDataTableContainer .no-results
+{
+    @apply bg-greyLite border border-slate text-center text-xl font-bold p-4;
+    /* text-center border border-slate text-xl font-bold p-4 */
+}

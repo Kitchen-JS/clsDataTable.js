@@ -35,7 +35,7 @@ function GenerateJsonData(numCols, numRows, dType, rType)
             {
                 var obj = new Object();
                 let r = rand();
-                obj[arr[y]] = randoTextArr[r];
+                obj[arr[y-1]] = randoTextArr[r];
                 columns.push(obj);
             }
         }
