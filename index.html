@@ -8,6 +8,7 @@
 <body>
 
     <button class="changeData" style="margin: 1px; margin-bottom: 2rem; border: 1px solid #000; border-radius: 7px; padding: 8px; background-color:grey; cursor: pointer; color: #fff; font-weight: bold;">Change Data</button>
+    <button class="T3Data" style="margin: 1px; margin-bottom: 2rem; border: 1px solid #000; border-radius: 7px; padding: 8px; background-color:grey; cursor: pointer; color: #fff; font-weight: bold;">T3 Data</button>
 
     <div class="cntr"></div>
     
@@ -33,56 +34,64 @@
 
         // },
         keyMap: {
-            0: {
-                title: 'Foo a',
-                width: '10rem',
-                minwidth: '10rem',
-                maxwidth: '10rem',
-                render: (data) =>
-                {
-                    let btn = document.createElement('button');
-                    //btn.classList.add('border', 'w-full', 'rounded', 'bg-greyLite');
-                    //btn.style = 'border: 1px solid';
-                    btn.innerHTML = 'Bob';
-                    btn.value = data;
-                    btn.addEventListener('click', () =>
-                    {
-                        console.log('Bob Button Pushed', btn.value);
-                    });
+            // 0: {
+            //     title: 'Foo a',
+            //     width: '10rem',
+            //     minwidth: '10rem',
+            //     maxwidth: '10rem',
+            //     render: (data) =>
+            //     {
+            //         let btn = document.createElement('button');
+            //         //btn.classList.add('border', 'w-full', 'rounded', 'bg-greyLite');
+            //         //btn.style = 'border: 1px solid';
+            //         btn.innerHTML = 'Bob';
+            //         btn.value = data;
+            //         btn.addEventListener('click', () =>
+            //         {
+            //             console.log('Bob Button Pushed', btn.value);
+            //         });
 
-                    return btn;
-                },
-                hidden: false
-            },
-            'b': {
-                title: 'Foo b',
-                render: (data) =>
-                {
-                    data = data.substring(0, 3);
-                    return data;
-                },
-                hidden: false
-            },
-            2: {
-                hidden: true
-            },
-            'c': {
-                remove: true,
-                hidden: false
-            }
+            //         return btn;
+            //     },
+            //     hidden: false
+            // },
+            // 'b': {
+            //     title: 'Foo b',
+            //     render: (data) =>
+            //     {
+            //         data = data.substring(0, 3);
+            //         return data;
+            //     },
+            //     hidden: false
+            // },
+            // 2: {
+            //     hidden: true
+            // },
+            // 'c': {
+            //     remove: true,
+            //     hidden: false
+            // }
         }
     });
 
     // numCols, numRows,
     // dType: bare, keyed
     // rType: string, json
-    let jsonData = GenerateJsonData(5, 8, 'keyed', 'json');
+    let jsonData = GenerateJsonData(5, 8, 'bare', 'json');
     
     dt.setJsonData(jsonData);
+    //console.log(JSON.stringify(jsonData))
 
     document.querySelector('.changeData').addEventListener('click', () =>
     {
         jsonData = GenerateJsonData(40, 300, 'keyed', 'json');
+        dt.setJsonData(jsonData);
+        //console.log(JSON.stringify(jsonData))
+    });
+
+    document.querySelector('.T3Data').addEventListener('click', () =>
+    {
+        jsonData = JSON.parse('[{"RecordLastUpdateDateTime":"/Date(1682622250243)/","OrgRoleAssignmentID":102,"RoleName":"SupportLead","FName":"Matthew","MName":"","LName":"Darling","Active":false,"fk_PersonID":235744},{"RecordLastUpdateDateTime":"/Date(1678384113520)/","OrgRoleAssignmentID":93,"RoleName":"SupportLead","FName":"Matthew","MName":"","LName":"Darling","Active":false,"fk_PersonID":235744},{"RecordLastUpdateDateTime":"/Date(1682622251713)/","OrgRoleAssignmentID":92,"RoleName":"StandupLead","FName":"Matthew","MName":"","LName":"Darling","Active":false,"fk_PersonID":235744},{"RecordLastUpdateDateTime":"/Date(1675361528187)/","OrgRoleAssignmentID":91,"RoleName":"SupportLead","FName":"Matthew","MName":"","LName":"Darling","Active":false,"fk_PersonID":235744},{"RecordLastUpdateDateTime":"/Date(1682622251993)/","OrgRoleAssignmentID":101,"RoleName":"StandupLead","FName":"Andrew","MName":"Zane","LName":"DeClue","Active":true,"fk_PersonID":217716},{"RecordLastUpdateDateTime":"/Date(1678384302500)/","OrgRoleAssignmentID":86,"RoleName":"StandupLead","FName":"Andrew","MName":"Zane","LName":"DeClue","Active":false,"fk_PersonID":217716},{"RecordLastUpdateDateTime":"/Date(1682622251833)/","OrgRoleAssignmentID":85,"RoleName":"SupportLead","FName":"Andrew","MName":"Zane","LName":"DeClue","Active":false,"fk_PersonID":217716},{"RecordLastUpdateDateTime":"/Date(1678384114520)/","OrgRoleAssignmentID":89,"RoleName":"SupportLead","FName":"Andrew","MName":"","LName":"Reddin","Active":false,"fk_PersonID":236071},{"RecordLastUpdateDateTime":"/Date(1678384302550)/","OrgRoleAssignmentID":88,"RoleName":"StandupLead","FName":"Andrew","MName":"","LName":"Reddin","Active":false,"fk_PersonID":236071},{"RecordLastUpdateDateTime":"/Date(1675361530477)/","OrgRoleAssignmentID":87,"RoleName":"SupportLead","FName":"Andrew","MName":"","LName":"Reddin","Active":false,"fk_PersonID":236071},{"RecordLastUpdateDateTime":"/Date(1682622251957)/","OrgRoleAssignmentID":100,"RoleName":"SupportLead","FName":"Caleb","MName":"EDISON","LName":"Trachte","Active":true,"fk_PersonID":125275},{"RecordLastUpdateDateTime":"/Date(1682622251913)/","OrgRoleAssignmentID":99,"RoleName":"StandupLead","FName":"Caleb","MName":"EDISON","LName":"Trachte","Active":false,"fk_PersonID":125275},{"RecordLastUpdateDateTime":"/Date(1678384302583)/","OrgRoleAssignmentID":90,"RoleName":"StandupLead","FName":"Caleb","MName":"EDISON","LName":"Trachte","Active":false,"fk_PersonID":125275},{"RecordLastUpdateDateTime":"/Date(1674142175820)/","OrgRoleAssignmentID":84,"RoleName":"StandupLead","FName":"Caleb","MName":"EDISON","LName":"Trachte","Active":false,"fk_PersonID":125275}]');
         dt.setJsonData(jsonData);
     });
 
