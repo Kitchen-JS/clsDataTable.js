@@ -149,72 +149,60 @@ class clsDataTable
     */
     setJsonData(jsonData)
     {
+        this.jsonDataOriginal = jsonData;
+        
+        // If JSON is a string parse it
+        if(typeof this.jsonData === 'string')
+        {
+            this.jsonData = JSON.parse(this.jsonData);
+        }
+
+        //Unkeyed dataset array of arrays we will need to assign keys
+        if(Array.isArray(jsonData[0]))
+        {
+            let reformedJsonData = [];
+            let numCols = jsonData[0].length;
+            let numColsChanged = false;
+            jsonData.forEach((row) => 
+            {
+                if(numCols !== row.length)
+                {
+                    console.error('Number of columns changed');
+                    numColsChanged = true;
+                }
+                let newRow = {};
+                let colCtr = 0;
+                row.forEach((col) =>
+                {
+                    newRow['col' + colCtr] = col;
+                    colCtr++;
+                });
+                reformedJsonData.push(newRow);
+            });
+            jsonData = reformedJsonData;
+        }
+
         // Handle column deletions from option KeyMap remove
-        jsonData = jsonData.map((row) =>
+        jsonData.forEach((row) =>
         {
             Object.keys(this.keyMap).forEach((key) =>
             {
                 if(typeof this.keyMap[key].remove !== 'undefined' && this.keyMap[key].remove)
                 {
-                    if(typeof row[key] !== 'undefined')
-                    {
-                        delete row[key];
-                    }
-
-                    Object.keys(row).forEach((col) =>
-                    {
-                        if(typeof row[col][key] !== 'undefined')
-                        {
-                            delete row[col][key];
-                        }
-                    });
+                    delete row[key.toString()];
                 }
             });
-            return row;
         });
 
-        this.jsonDataOriginal = jsonData;
         this.jsonData = jsonData;
 
-        if(typeof this.jsonData === 'undefined' || !this.jsonData)
+        if(typeof this.jsonData === 'undefined' || !this.jsonData || this.jsonData.length <= 1)
         {
             console.log('clsDataTable.update: jsonData is empty');
             this.jsonData = [];
         }
-
-        if(typeof this.jsonData === 'string')
-        {
-            this.jsonData = JSON.parse(this.jsonData);
-        }
-        
-        if(this.jsonData && this.jsonData.length <= 1)
-        {
-            console.log('clsDataTable.update: jsonData is empty');
-        }
         else
         {
-            //If Keys/Headers do not exist create them
-            this.jsonData = this.jsonData.map((row) =>
-            {
-                let i = 0;
-                var obj = new Object();
-                row = row.forEach((col) =>
-                {
-                    if(typeof col === 'string')
-                    {
-                        obj['col' + i] = col;
-                        i++;
-                    }
-                    else
-                    {
-                        obj[Object.keys(col)[0]] = col[Object.keys(col)[0]];
-                        i++;
-                    }
-                });
-
-                return obj;
-            });
-
             // Parse Keys
             this.keys = [];
             Object.keys(this.jsonData[0]).forEach((key) =>
@@ -381,7 +369,8 @@ class clsDataTable
                 return (a < b) ? 1 : (a > b) ? -1 : 0;
             }
         };
-          
+        
+        //ToDo:// Address sort issue
         this.jsonData.sort((a, b) => 
         {
             return compareStrings(a[key], b[key]);

@@ -38,7 +38,7 @@ function GenerateJsonData(numCols, numRows, dType, rType)
             else if(dType === 'keyed')
             {
                 let val = randoTextArr[rand(randoTextArr.length)];
-                columns['col' + y] = val;
+                columns[arr[rand(arr.length)] + y] = val;
             }
         }
         //console.log(columns)

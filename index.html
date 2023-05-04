@@ -34,50 +34,50 @@
 
         // },
         keyMap: {
-            // 0: {
-            //     title: 'Foo a',
-            //     width: '10rem',
-            //     minwidth: '10rem',
-            //     maxwidth: '10rem',
-            //     render: (data) =>
-            //     {
-            //         let btn = document.createElement('button');
-            //         //btn.classList.add('border', 'w-full', 'rounded', 'bg-greyLite');
-            //         //btn.style = 'border: 1px solid';
-            //         btn.innerHTML = 'Bob';
-            //         btn.value = data;
-            //         btn.addEventListener('click', () =>
-            //         {
-            //             console.log('Bob Button Pushed', btn.value);
-            //         });
+            0: {
+                title: 'Foo a',
+                width: '10rem',
+                minwidth: '10rem',
+                maxwidth: '10rem',
+                render: (data) =>
+                {
+                    let btn = document.createElement('button');
+                    //btn.classList.add('border', 'w-full', 'rounded', 'bg-greyLite');
+                    //btn.style = 'border: 1px solid';
+                    btn.innerHTML = 'Bob';
+                    btn.value = data;
+                    btn.addEventListener('click', () =>
+                    {
+                        console.log('Bob Button Pushed', btn.value);
+                    });
 
-            //         return btn;
-            //     },
-            //     hidden: false
-            // },
-            // 'b': {
-            //     title: 'Foo b',
-            //     render: (data) =>
-            //     {
-            //         data = data.substring(0, 3);
-            //         return data;
-            //     },
-            //     hidden: false
-            // },
-            // 2: {
-            //     hidden: true
-            // },
-            // 'c': {
-            //     remove: true,
-            //     hidden: false
-            // }
+                    return btn;
+                },
+                hidden: false
+            },
+            'b': {
+                title: 'Foo b',
+                render: (data) =>
+                {
+                    data = data.substring(0, 3);
+                    return data;
+                },
+                hidden: false
+            },
+            2: {
+                hidden: true
+            },
+            'col1': {
+                remove: true,
+                hidden: false
+            }
         }
     });
 
     // numCols, numRows,
     // dType: bare, keyed
     // rType: string, json
-    let jsonData = GenerateJsonData(5, 8, 'bare', 'json');
+    let jsonData = GenerateJsonData(5, 8, 'keyed', 'json');
     
     dt.setJsonData(jsonData);
     //console.log(JSON.stringify(jsonData))
