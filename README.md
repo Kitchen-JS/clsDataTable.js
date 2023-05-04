@@ -36,6 +36,7 @@ let dt = new clsDataTable(
         // colWidth: '10rem',
         // colWidthMin: '10rem',
         // colWidthMax: '10rem',
+        // refreshFunction: () => {}, //There is a default to revert to original json data
         keyMap: {
             0: {
                 title: 'Foo a',

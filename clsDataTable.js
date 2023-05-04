@@ -47,6 +47,14 @@ class clsDataTable
             options.includeFooter = false;
         }
 
+        if(typeof options.refreshFunction === 'undefined')
+        {
+            options.refreshFunction = () =>
+            {
+                this.setJsonData(this.jsonDataOriginal);
+            };
+        }
+
         this.options = options || {};
 
         this.keyMap = options.keyMap || null;
@@ -92,6 +100,7 @@ class clsDataTable
         this.symbols.printer = '';
         this.symbols.expand = '';
         this.symbols.magnify = '';
+        this.symbols.refresh = '';
 
         let dataStr = 'data:image/svg+xml;charset=utf-8,';
 
@@ -107,7 +116,15 @@ class clsDataTable
         this.symbols.paperclip.src    +=   '<svg xmlns="http://www.w3.org/2000/svg" width="2.834" height="2.834" fill="DimGray"><path d="M2.068.395L.534 1.931a.29.29 0 000 .414.292.292 0 00.412 0L2.477.815A.483.483 0 002.58.294a.493.493 0 00-.258-.259.496.496 0 00-.366.001.456.456 0 00-.154.104L.247 1.694a.672.672 0 00-.001.946h.001c.13.131.301.195.472.195a.664.664 0 00.473-.195l1.561-1.561a.097.097 0 000-.137.096.096 0 00-.138 0L1.054 2.503a.472.472 0 01-.671 0 .472.472 0 01.001-.67L1.938.278a.28.28 0 01.308-.061.28.28 0 01.176.262.305.305 0 01-.021.108.286.286 0 01-.063.091L.809 2.21a.095.095 0 01-.07.027.102.102 0 01-.067-.027.092.092 0 01-.029-.068c0-.025.008-.051.028-.07L2.208.536a.097.097 0 000-.137.095.095 0 00-.14-.004z"/></svg>';
         this.symbols.printer.src      +=   '<svg xmlns="http://www.w3.org/2000/svg" width="2.835" height="2.835" fill="DimGray"><path d="M2.986.962H2.59V1.39H.243V.963h-.396c-.117 0-.211.074-.211.164V2.106h.51v-.312h.158v.946c0 .054.041.096.094.096h2.039a.094.094 0 00.095-.096v-.946h.154v.311H3.2v-.979c-.002-.089-.097-.164-.214-.164zM2.09 2.373H.761c-.043 0-.08-.027-.08-.063s.037-.062.08-.062H2.09c.043 0 .079.026.079.062s-.036.063-.079.063zm0-.453H.761c-.043 0-.08-.028-.08-.062s.037-.062.08-.062H2.09c.043 0 .079.027.079.062 0 .034-.036.062-.079.062zm.818-.672a.092.092 0 01-.092-.092c0-.049.041-.09.092-.09s.091.041.091.09a.09.09 0 01-.091.092z"/><path d="M2.53.633a.11.11 0 00-.026-.067L1.965.029A.09.09 0 001.898 0h-1.5a.095.095 0 00-.096.095v1.236h2.229L2.53.633zM1.92.611L1.919.156l.477.455H1.92z"/></svg>';
         this.symbols.expand.src       +=   '<svg xmlns="http://www.w3.org/2000/svg" width="2.834" height="2.834" fill="DimGray"><path d="M2.711 0h-.693a.124.124 0 00-.124.123l.285.287-.343.344a.17.17 0 00-.053.125.179.179 0 00.303.125L2.429.66l.282.284A.124.124 0 002.834.82V.125A.124.124 0 002.711 0zM2.709 1.893l-.289.29-.351-.351a.177.177 0 00-.25 0 .174.174 0 000 .248l.351.351-.279.278c0 .067.057.123.123.123h.695a.125.125 0 00.125-.123v-.692a.124.124 0 00-.125-.124zM.66.408L.944.125A.124.124 0 00.82.002H.125A.125.125 0 000 .125v.692C0 .886.057.94.125.94L.41.656l.354.354c.033.035.079.052.125.052s.09-.017.125-.052a.177.177 0 000-.249L.66.408zM.873 1.713l-.463.465-.287-.287A.123.123 0 000 2.015v.696c0 .068.056.123.123.123h.693a.123.123 0 00.123-.123l-.281-.283.465-.465a.179.179 0 000-.25.179.179 0 00-.25 0z"/></svg>';
-        this.symbols.magnify.src      +=   '<svg xmlns="http://www.w3.org/2000/svg" width="2.834" height="2.834" fill="Gray"><path d="M.291 1.693a.995.995 0 001.354.047l.179.18a.169.169 0 00.038.186l.677.679a.177.177 0 00.244 0 .176.176 0 000-.246l-.677-.676a.17.17 0 00-.186-.038l-.18-.18A.99.99 0 001.694.291a.99.99 0 00-1.403 0 .99.99 0 000 1.402zM.16.992A.83.83 0 011.582.404a.835.835 0 01-.59 1.422A.835.835 0 01.16.992z"/><path d="M.463 1.523A.748.748 0 10.994.244a.746.746 0 00-.75.748c0 .2.077.389.219.531zm.645.059a.04.04 0 01-.022.006.639.639 0 01-.5-.187.64.64 0 01-.163-.637.06.06 0 01.03-.033A.053.053 0 01.494.73a.062.062 0 01.01.003.055.055 0 01.031.062v.006a.514.514 0 00.131.517.521.521 0 00.406.152.057.057 0 01.06.045l.002.007-.001.022-.002.006-.006.015a.135.135 0 01-.017.017z"/></svg>';
+        this.symbols.magnify.src      +=   '<svg xmlns="http://www.w3.org/2000/svg" width="2.834" height="2.834" fill="DimGray"><path d="M.291 1.693a.995.995 0 001.354.047l.179.18a.169.169 0 00.038.186l.677.679a.177.177 0 00.244 0 .176.176 0 000-.246l-.677-.676a.17.17 0 00-.186-.038l-.18-.18A.99.99 0 001.694.291a.99.99 0 00-1.403 0 .99.99 0 000 1.402zM.16.992A.83.83 0 011.582.404a.835.835 0 01-.59 1.422A.835.835 0 01.16.992z"/><path d="M.463 1.523A.748.748 0 10.994.244a.746.746 0 00-.75.748c0 .2.077.389.219.531zm.645.059a.04.04 0 01-.022.006.639.639 0 01-.5-.187.64.64 0 01-.163-.637.06.06 0 01.03-.033A.053.053 0 01.494.73a.062.062 0 01.01.003.055.055 0 01.031.062v.006a.514.514 0 00.131.517.521.521 0 00.406.152.057.057 0 01.06.045l.002.007-.001.022-.002.006-.006.015a.135.135 0 01-.017.017z"/></svg>';
+        this.symbols.refresh.src      +=   '<svg xmlns="http://www.w3.org/2000/svg" width="2.835" height="2.835" fill="DimGray"><path d="M0 1.399A1.26 1.26 0 011.142.162a1.255 1.255 0 011.131.496c.104.139.178.293.219.461h.305c.014 0 .026.007.033.021a.037.037 0 010 .038l-.438.762a.05.05 0 01-.014.015.038.038 0 01-.054-.007l-.002-.006-.443-.764c-.007-.012-.007-.027 0-.039s.021-.019.035-.019h.281a.981.981 0 00-.31-.458.987.987 0 00-1.378.133.976.976 0 00.135 1.379.962.962 0 00.562.221.128.128 0 01.094.051c.007.008.011.017.015.023.004.012.01.022.015.033a.123.123 0 01-.011.123.127.127 0 01-.111.055 1.256 1.256 0 01-.951-.501A1.267 1.267 0 010 1.399z"/></svg>';
+
+        this.symbols.paperclip.classList.add('paperclip');
+        this.symbols.refresh.classList.add('refresh');
+
+        this.symbols.filter.classList.add('kw-hidden');
+
+        
 
         // var parser = new DOMParser();
         // let svgData = parser.parseFromString(this.symbols.paperclip.src, "image/svg+xml");
@@ -193,7 +210,7 @@ class clsDataTable
     buildFilters()
     {
         this.filterBtns = document.createElement('div');
-        this.filterBtns.classList.add('w-full', 'block', 'text-xs', 'p-1', 'h-7');
+        this.filterBtns.classList.add('filterBtns');
         this.filterBtns.style.minWidth = this.minWidth;
 
         this.filterBtns.append(this.symbols.filter);
@@ -201,6 +218,7 @@ class clsDataTable
         this.filterBtns.append(this.symbols.disk);
         this.filterBtns.append(this.symbols.paperclip);
         this.filterBtns.append(this.symbols.printer);
+        this.filterBtns.append(this.symbols.refresh);
 
         this.symbols.disk.addEventListener('click', () =>
         {
@@ -212,12 +230,12 @@ class clsDataTable
             let data = `${this.convert('tab')}`;
             navigator.clipboard.writeText(data);
 
-            this.symbols.paperclip.classList.add('border-2', 'border-success', 'rounded', 'bg-success', 'text-success', 'underline');
+            this.symbols.paperclip.classList.add('pushed');
             //this.symbols.paperclip
 
             setTimeout(() => 
             {
-                this.symbols.paperclip.classList.remove('border-2', 'border-success', 'rounded', 'bg-success', 'text-success', 'underline');
+                this.symbols.paperclip.classList.remove('pushed');
             }, 1200);
         });
 
@@ -246,10 +264,20 @@ class clsDataTable
             this.filterUIPopup();
         });
 
+        this.symbols.refresh.addEventListener('click', () =>
+        {
+            this.symbols.refresh.classList.add('rotating');
+
+            setTimeout(() => 
+            {
+                this.symbols.refresh.classList.remove('rotating');
+            }, 500);
+        });
+
         let searchBox = document.createElement('div');
-        searchBox.classList.add('float-right', 'h-7', 'mb-1');
+        searchBox.classList.add('searchBox');
         let searchInput = document.createElement('input');
-        searchInput.classList.add('bg-transparent', 'inline-block', 'h-7', 'border', 'border-slate', 'rounded-md', 'sm:text-sm', 'focus:border-greyLite', 'p-1', 'pl-6', 'shadow-sm', 'placeholder-slate', 'focus:outline-none');
+        searchInput.classList.add('searchInput');
         searchInput.placeholder = 'Search';
         searchInput.style.backgroundImage = "url('" + this.symbols.magnify.src + "')";
         searchInput.style.backgroundPositionY = 'center';
@@ -268,7 +296,7 @@ class clsDataTable
         });
         searchBox.append(searchInput);
         let searchCancelBtn = document.createElement('button');
-        searchCancelBtn.classList.add('inline-block', 'border', 'rounded', 'text-greyDark', 'bg-greyLite', 'h-full', 'ml-1', 'w-5', 'font-bold');
+        searchCancelBtn.classList.add('searchCancelBtn');
         searchCancelBtn.innerHTML = 'X';
         searchCancelBtn.addEventListener('click', () =>
         {
