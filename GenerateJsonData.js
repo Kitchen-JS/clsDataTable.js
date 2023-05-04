@@ -11,7 +11,7 @@ function GenerateJsonData(numCols, numRows, dType, rType)
     let randoTextArr = ["Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit", "Quisque eu lorem elementum", "Etiam in consequat", "Pellentesque", "tincidunt ex non est tempus", "vulputate", "feugiat", "fermentum", "massa", "porttitor", "libero", "tincidunt feugiat in vulputate nisl", 1, 2, 0, 4, 5, 'a1', 'a2', 'a4'];
     randoTextArr.sort();
 
-    const rand = () => 
+    const rand = (max) => 
     {
         let num = Math.floor(Math.random() * randoTextArr.length); //from 0 to 10
         return num;
@@ -22,23 +22,26 @@ function GenerateJsonData(numCols, numRows, dType, rType)
     let rows = [];
     for(let x=0; x<numRows; x++)
     {
-        let columns = [];
+        let columns = {};
+        if(dType === 'bare')
+        {
+            columns = [];
+        }
         for(let y=0; y<numCols; y++)
         {
             if(dType === 'bare')
             {
-                let r = rand();
-                let val = randoTextArr[r];
-                columns.push(val);
+                //No Keys just arrays of arrays
+                //[["/Date(1682622250243)/",333,"SupportLead","Dave","","Davis",false,3377665]]
+                columns.push(randoTextArr[rand(randoTextArr.length -1)]);
             }
             else if(dType === 'keyed')
             {
-                var obj = new Object();
-                let r = rand();
-                obj[arr[y-1]] = randoTextArr[r];
-                columns.push(obj);
+                let val = randoTextArr[rand(randoTextArr.length)];
+                columns['col' + y] = val;
             }
         }
+        //console.log(columns)
         rows.push(columns);
     }
 
