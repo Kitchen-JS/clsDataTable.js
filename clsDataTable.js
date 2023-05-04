@@ -123,6 +123,7 @@ class clsDataTable
         this.symbols.paperclip.classList.add('paperclip');
         this.symbols.refresh.classList.add('refresh');
 
+        // Hide until finished
         this.symbols.filter.classList.add('kw-hidden');        
 
         // var parser = new DOMParser();
