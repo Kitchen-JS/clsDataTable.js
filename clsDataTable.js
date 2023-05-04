@@ -11,6 +11,7 @@
  * @property {string}  options.keyMap.title     - Set the column title
  * @property {object}  options.keyMap.render    - Function passed in to manipulate the cell
  * @property {number}  options.keyMap.hidden    - Hidden column still in html on page
+ * @property {number}  options.keyMap.remove    - Remove column from dataset
  */
 class clsDataTable
 {
@@ -122,9 +123,7 @@ class clsDataTable
         this.symbols.paperclip.classList.add('paperclip');
         this.symbols.refresh.classList.add('refresh');
 
-        this.symbols.filter.classList.add('kw-hidden');
-
-        
+        this.symbols.filter.classList.add('kw-hidden');        
 
         // var parser = new DOMParser();
         // let svgData = parser.parseFromString(this.symbols.paperclip.src, "image/svg+xml");
@@ -149,6 +148,30 @@ class clsDataTable
     */
     setJsonData(jsonData)
     {
+        // Handle column deletions from option KeyMap remove
+        jsonData = jsonData.map((row) =>
+        {
+            Object.keys(this.keyMap).forEach((key) =>
+            {
+                if(typeof this.keyMap[key].remove !== 'undefined' && this.keyMap[key].remove)
+                {
+                    if(typeof row[key] !== 'undefined')
+                    {
+                        delete row[key];
+                    }
+
+                    Object.keys(row).forEach((col) =>
+                    {
+                        if(typeof row[col][key] !== 'undefined')
+                        {
+                            delete row[col][key];
+                        }
+                    });
+                }
+            });
+            return row;
+        });
+
         this.jsonDataOriginal = jsonData;
         this.jsonData = jsonData;
 
@@ -209,6 +232,10 @@ class clsDataTable
 
     buildFilters()
     {
+        let searchBox = document.createElement('div');
+        let searchInput = document.createElement('input');
+        let searchCancelBtn = document.createElement('button');
+
         this.filterBtns = document.createElement('div');
         this.filterBtns.classList.add('filterBtns');
         this.filterBtns.style.minWidth = this.minWidth;
@@ -266,6 +293,10 @@ class clsDataTable
 
         this.symbols.refresh.addEventListener('click', () =>
         {
+            searchCancelBtn.dispatchEvent(new Event("click"));
+
+            this.options.refreshFunction();
+
             this.symbols.refresh.classList.add('rotating');
 
             setTimeout(() => 
@@ -274,9 +305,7 @@ class clsDataTable
             }, 500);
         });
 
-        let searchBox = document.createElement('div');
         searchBox.classList.add('searchBox');
-        let searchInput = document.createElement('input');
         searchInput.classList.add('searchInput');
         searchInput.placeholder = 'Search';
         searchInput.style.backgroundImage = "url('" + this.symbols.magnify.src + "')";
@@ -295,7 +324,6 @@ class clsDataTable
             
         });
         searchBox.append(searchInput);
-        let searchCancelBtn = document.createElement('button');
         searchCancelBtn.classList.add('searchCancelBtn');
         searchCancelBtn.innerHTML = 'X';
         searchCancelBtn.addEventListener('click', () =>
@@ -489,6 +517,9 @@ class clsDataTable
         }
         let headerRow = document.createElement('div');
         headerRow.classList.add('table-row');
+
+        let removedKeys = [];
+
         let colCtr=0;
         this.keys.forEach((key) =>
         {

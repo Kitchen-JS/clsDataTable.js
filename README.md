@@ -58,6 +58,9 @@ let dt = new clsDataTable(
                 },
                 hidden: false
             },
+            'c': {
+                remove: true,
+            },
             2: {
                 hidden: true
             },
