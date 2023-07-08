@@ -3,9 +3,24 @@
     "tailwindcss": "^3.2.4"
   },
   "dependencies": {
+    "@node-minify/babel-minify": "^8.0.6",
+    "@node-minify/clean-css": "^8.0.6",
+    "@node-minify/core": "^8.0.6",
+    "@node-minify/google-closure-compiler": "^8.0.6",
+    "@node-minify/uglify-js": "^8.0.6",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/line-clamp": "^0.4.2",
     "@tailwindcss/typography": "^0.5.9"
-  }
+  },
+  "name": "clsdatatable",
+  "description": "A class to build responsive tables that are populated with json data",
+  "version": "1.0.0",
+  "main": "build.js",
+  "scripts": {
+    "build": "npx tailwindcss -i ./src/input.css -o ./dist/clsDataTable.css && node build.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
 }

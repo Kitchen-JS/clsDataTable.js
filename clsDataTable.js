@@ -3,8 +3,6 @@
  * @constructor
  * @param {object} options - Data Table options object
  * @param {object} options.keyMap - Options for columns and header title, hidden, render
- */
-/**
  * @namespace
  * @property {object}  options                  - options object
  * @property {object}  options.keyMap           - Keymap for setting title, functions to render value
