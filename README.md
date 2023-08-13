@@ -1,4 +1,4 @@
-# Data-Table
+# clsDataTable.js
 A class to build responsive tables that are populated with json data
 
 ![ScreenShot](ScreenShot.png)
@@ -15,11 +15,11 @@ A class to build responsive tables that are populated with json data
 - Full Screen / Projection of the Table
 - Print just the data
 
-## Update CSS
-npx tailwindcss -i ./src/input.css -o ./dist/clsDataTable.css --watch **/
-
 ## Build
 npm run build
+
+## Update CSS
+npx tailwindcss -i ./src/input.css -o ./dist/clsDataTable.css --watch **/
 
 ### Usage
 ```
@@ -33,6 +33,7 @@ let dt = new clsDataTable(
         sort: true,
         freezeHeader: false,
         includeFooter: false,
+        hideButtons: false,
         // rowHeight: '10rem',
         // rowHeightMin: '10rem',
         // rowHeightMax: '10rem',

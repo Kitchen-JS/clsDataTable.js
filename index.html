@@ -13,9 +13,11 @@
     <div class="cntr"></div>
     
 </body>
-<script src="GenerateJsonData.js"></script>
-<!-- <script src="clsDataTable.js"></script> -->
+<script src="src/GenerateJsonData.js"></script>
+
+<!-- <script src="src/clsDataTable.js"></script> -->
 <script src="dist/clsDataTable.js"></script>
+
 <script>
 
     let dt = new clsDataTable(
@@ -25,6 +27,7 @@
         sort: true,
         freezeHeader: true,
         includeFooter: true,
+        hideButtons: true,
         // rowHeight: '10rem',
         // rowHeightMin: '10rem',
         // rowHeightMax: '10rem',
@@ -32,7 +35,6 @@
         // colWidthMin: '10rem',
         // colWidthMax: '10rem',
         // refreshFunction: () => {
-
         // },
         keyMap: {
             0: {

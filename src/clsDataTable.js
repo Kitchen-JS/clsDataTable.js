@@ -1,5 +1,6 @@
 /**
  * Data Table Class that accepts JSON Data to display in a Table
+ * @version 1.1.1
  * @constructor
  * @param {object} options - Data Table options object
  * @param {object} options.keyMap - Options for columns and header title, hidden, render
@@ -52,6 +53,11 @@ class clsDataTable
             {
                 this.setJsonData(this.jsonDataOriginal);
             };
+        }
+
+        if(typeof options.hideButtons === 'undefined')
+        {
+            options.hideButtons = false;
         }
 
         this.options = options || {};
@@ -122,7 +128,17 @@ class clsDataTable
         this.symbols.refresh.classList.add('refresh');
 
         // Hide until finished
-        this.symbols.filter.classList.add('kw-hidden');        
+        this.symbols.filter.classList.add('kw-hidden');
+        if(this.options.hideButtons)
+        {
+            this.symbols.filter.classList.add('kw-hidden');
+            this.symbols.paperclip.classList.add('kw-hidden');
+            this.symbols.disk.classList.add('kw-hidden');
+            this.symbols.printer.classList.add('kw-hidden');
+            this.symbols.expand.classList.add('kw-hidden');
+            this.symbols.magnify.classList.add('kw-hidden');
+            this.symbols.refresh.classList.add('kw-hidden');
+        }
 
         // var parser = new DOMParser();
         // let svgData = parser.parseFromString(this.symbols.paperclip.src, "image/svg+xml");

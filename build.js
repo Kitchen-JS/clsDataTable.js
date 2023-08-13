@@ -23,7 +23,7 @@ function minifyFiles()
     minify({
         compressor: uglifyJS,
         comments: 'all',
-        input: 'clsDataTable.js',
+        input: 'src/clsDataTable.js',
         output: 'dist/clsDataTable.js',
         replaceInPlace: true,
         type: 'js',
@@ -44,7 +44,7 @@ function minifyFiles()
 
     minify({
         compressor: cleanCSS,
-        input: 'dist/clsDataTable.css',
+        input: 'src/input.css',
         output: 'dist/clsDataTable.css',
         replaceInPlace: true,
         type: 'css',
