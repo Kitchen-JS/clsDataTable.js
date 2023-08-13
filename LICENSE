@@ -1,21 +1,13 @@
-MIT License
-
-Copyright (c) 2023 Kitchen JS - https://kitchenjs.org/
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+ * Data Table Class that accepts JSON Data to display in a Table
+ * Copyright (c) 2023 Kitchen JS - https://kitchenjs.org/
+ * @version 1.1.1
+ * @constructor
+ * @param {object} options - Data Table options object
+ * @param {object} options.keyMap - Options for columns and header title, hidden, render
+ * @namespace
+ * @property {object}  options                  - options object
+ * @property {object}  options.keyMap           - Keymap for setting title, functions to render value
+ * @property {string}  options.keyMap.title     - Set the column title
+ * @property {object}  options.keyMap.render    - Function passed in to manipulate the cell
+ * @property {number}  options.keyMap.hidden    - Hidden column still in html on page
+ * @property {number}  options.keyMap.remove    - Remove column from dataset

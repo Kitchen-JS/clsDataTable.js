@@ -1,5 +1,6 @@
 /**
  * Data Table Class that accepts JSON Data to display in a Table
+ * Copyright (c) 2023 Kitchen JS - https://kitchenjs.org/
  * @version 1.1.1
  * @constructor
  * @param {object} options - Data Table options object
