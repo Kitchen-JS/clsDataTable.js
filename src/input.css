@@ -78,6 +78,117 @@
     /* text-center border border-slate text-xl font-bold p-4 */
 }
 
+
+.clsDataTableContainer .titleRow
+{
+    @apply w-full mb-3;
+}
+
+.clsDataTableContainer .titleRow .title
+{
+    @apply inline-block font-bold text-lg w-8/12;
+}
+
+.clsDataTableContainer .titleRow .close
+{
+    @apply inline-block border rounded text-greyDark text-center bg-greyLite h-full ml-1 font-bold w-6 float-right;
+}
+
+.clsDataTableContainer .titleRow .clearFilter
+{
+    @apply border rounded text-greyDark text-center bg-greyLite p-1;
+}
+
+.clsDataTableContainer .filterUI .colHeadRow
+{
+    @apply w-full mb-3 font-bold;
+}
+
+.clsDataTableContainer .filterUI .colHeadRow .chrc1
+{
+    @apply w-2/12 text-left inline-block underline;
+}
+
+.clsDataTableContainer .filterUI .colHeadRow .chrc2
+{
+    @apply w-5/12 text-center inline-block underline;
+}
+
+.clsDataTableContainer .filterUI .colHeadRow .chrc3
+{
+    @apply w-1/12 text-center inline-block underline;
+}
+
+.clsDataTableContainer .filterUI .colHeadRow .chrc4
+{
+    @apply w-4/12 text-right inline-block underline;
+}
+
+.clsDataTableContainer .filterUI .filterContainer
+{
+    @apply block;
+}
+
+.clsDataTableContainer .filterUI .filterContainer .filterRow
+{
+    @apply w-full mb-2 align-middle;
+}
+
+.clsDataTableContainer .filterUI .keyEl
+{
+    @apply inline-block w-2/12 align-middle;
+}
+
+.clsDataTableContainer .filterRow .input
+{
+    @apply w-5/12 bg-transparent inline-block h-7 border border-slate rounded-md sm:text-sm focus:border-greyLite p-1 pl-6 shadow-sm placeholder-slate focus:outline-none align-middle;
+}
+
+.clsDataTableContainer .filterRow .clear
+{
+    @apply inline-block border rounded text-greyDark bg-greyLite h-full ml-1 w-5 font-bold align-middle;
+}
+
+.clsDataTableContainer .filterRow .checkbox
+{
+    @apply bg-transparent inline h-7 border border-slate rounded-md sm:text-sm p-1 pl-6 shadow-sm placeholder-slate float-right align-middle focus:border-greyLite focus:checked:border-greyLite focus:outline-none checked:bg-slate focus:bg-white focus:checked:bg-slate focus-visible:bg-white focus-visible:checked:bg-slate hover:border-greyLite hover:bg-black hover:checked:bg-black;
+}
+
+.clsDataTableContainer .exportUI
+{
+    @apply p-4 block absolute bg-greyLite z-9999 border rounded w-96 h-64 max-h-64 overflow-y-auto top-10 left-44;
+}
+
+.clsDataTableContainer .exportUI .uiTitleRow
+{
+    @apply w-full mb-6;
+}
+
+.clsDataTableContainer .exportUI .uiTitle
+{
+    @apply inline-block w-3/4 text-lg font-bold;
+}
+
+.clsDataTableContainer .exportUI .closeUI
+{
+    @apply inline-block border rounded p-2 text-sm bg-greyLite font-bold float-right;
+}
+
+.clsDataTableContainer .exportUI .exportCsv
+{
+    @apply block border rounded p-2 m-2 bg-slate text-white font-bold;
+}
+
+.clsDataTableContainer .exportUI .exportTab
+{
+    @apply block border rounded p-2 m-2 bg-slate text-white font-bold;
+}
+
+.clsDataTableContainer .exportUI .exportJson
+{
+    @apply block border rounded p-2 m-2 bg-slate text-white font-bold;
+}
+
 @-webkit-keyframes rotating /* Safari and Chrome */ 
 {
     from 

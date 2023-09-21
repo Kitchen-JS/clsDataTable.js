@@ -1,13 +1,9 @@
 const fs = require('fs');
 const minify = require('@node-minify/core');
-const cleanCSS = require('@node-minify/clean-css');
-const babelMinify = require('@node-minify/babel-minify');
-const gcc = require('@node-minify/google-closure-compiler');
-const uglifyJS = require('@node-minify/uglify-js');
 
 let license = '';
 
-fs.readFile('LICENSE', 'utf8', (err, data) => 
+fs.readFileSync('LICENSE', 'utf8', (err, data) => 
 {
     if (err)
     {
@@ -15,53 +11,39 @@ fs.readFile('LICENSE', 'utf8', (err, data) =>
         return;
     }
     license = data;
-    minifyFiles();
 });
 
-function minifyFiles()
+// ToDeleteFromOutputCSS.txt
+
+const classArr = [];
+fs.readFile('./src/input.css', 'utf8', (err, data) => 
 {
-    minify({
-        compressor: uglifyJS,
-        comments: 'all',
-        input: 'src/clsDataTable.js',
-        output: 'dist/clsDataTable.js',
-        replaceInPlace: true,
-        type: 'js',
-        options: {
-            output: {},
-            compress: true,
-            annotations: true,
-            mangle: true,
-            output: {
-                beautify: false,
-                preamble: '/*\n' + license + '\n*/'
-            }
-        },
-    }).then(function (min) 
+    if (err)
     {
+        console.error(err);
+        return;
+    }
 
+
+    const classesRegex = /.classList.add.*\)/g;
+
+    data.split('\r\n').forEach((ln) =>
+    {
+        let match = ln.match(classesRegex);
+        if(match)
+        {
+            console.log(match)
+        }
     });
 
-    minify({
-        compressor: cleanCSS,
-        input: 'src/input.css',
-        output: 'dist/clsDataTable.css',
-        replaceInPlace: true,
-        type: 'css',
-        options: {
-            comments: 'all',
-            annotations: true,
-            warnings: true,
-            mangle: true,
-            output: {},
-            compress: true,
-            output: {
-                beautify: false,
-                preamble: '/***\n' + license + '\n***/'
-            }
-        },
-    }).then(function (min) 
-    {
+   // classArr = [...];
+    
+    //console.log(Array.from(data.matchAll(classesRegex)))
 
-    });
-}
+
+});
+
+
+// src/clsDataTable.js
+//classList.add('
+//fill cssClasses.json

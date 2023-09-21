@@ -1,7 +1,7 @@
 /**
  * Data Table Class that accepts JSON Data to display in a Table
  * Copyright (c) 2023 Kitchen JS - https://kitchenjs.org/
- * @version 1.1.1
+ * @version 1.2.0
  * @constructor
  * @param {object} options - Data Table options object
  * @param {object} options.keyMap - Options for columns and header title, hidden, render
@@ -849,15 +849,15 @@ class clsDataTable
         });
 
         let titleRow = document.createElement('div');
-        titleRow.classList.add('titleRow', 'w-full', 'mb-3');
+        titleRow.classList.add('titleRow');
 
         let title = document.createElement('div');
-        title.classList.add('title', 'inline-block', 'font-bold', 'text-lg', 'w-8/12');
+        title.classList.add('title');
         title.innerHTML = 'Filters';
         titleRow.append(title);
 
         let closeFilterUI = document.createElement('button');
-        closeFilterUI.classList.add('inline-block', 'border', 'rounded', 'text-greyDark', 'text-center', 'bg-greyLite', 'h-full', 'ml-1', 'font-bold', 'w-6', 'float-right');
+        closeFilterUI.classList.add('close');
         closeFilterUI.innerHTML = 'X';
         closeFilterUI.addEventListener('click', () =>
         {
@@ -873,7 +873,7 @@ class clsDataTable
         let clearFilters = document.createElement('div');
         clearFilters.classList.add('w-full');
         let clearFiltersBtn = document.createElement('button');
-        clearFiltersBtn.classList.add('border', 'rounded', 'text-greyDark', 'text-center', 'bg-greyLite', 'p-1');
+        clearFiltersBtn.classList.add('clearFilter');
         clearFiltersBtn.innerHTML = 'Clear Filters';
         clearFiltersBtn.addEventListener('click', () =>
         {
@@ -892,19 +892,19 @@ class clsDataTable
         this.filterUI.append(titleRow);
 
         let colHeadRow = document.createElement('div');
-        colHeadRow.classList.add('w-full', 'mb-3', 'font-bold');
+        colHeadRow.classList.add('colHeadRow');
 
         let chrc1 = document.createElement('div');
-        chrc1.classList.add('w-2/12', 'text-left', 'inline-block', 'underline');
+        chrc1.classList.add('chrc1');
         chrc1.innerHTML = 'Col';
         let chrc2 = document.createElement('div');
-        chrc2.classList.add('w-5/12', 'text-center', 'inline-block', 'underline');
+        chrc2.classList.add('chrc2');
         chrc2.innerHTML = 'Filter';
         let chrc3 = document.createElement('div');
-        chrc3.classList.add('w-1/12', 'text-center', 'inline-block', 'underline');
+        chrc3.classList.add('chrc3');
         chrc3.innerHTML = 'Clr';
         let chrc4 = document.createElement('div');
-        chrc4.classList.add('w-4/12', 'text-right', 'inline-block', 'underline');
+        chrc4.classList.add('chrc4');
         chrc4.innerHTML = '+/-&nbsp;';
         
         colHeadRow.append(chrc1, chrc2, chrc3, chrc4);
@@ -914,21 +914,19 @@ class clsDataTable
         Object.keys(this.filters).forEach((key) =>
         {
             let filterContainer = document.createElement('div');
-            filterContainer.classList.add('block');
+            filterContainer.classList.add('filterContainer');
 
             let filterRow = document.createElement('div');
-            filterRow.classList.add('w-full', 'mb-2', 'align-middle');
+            filterRow.classList.add('filterRow');
 
             let keyEl = document.createElement('span');
-            keyEl.classList.add('inline-block', 'w-2/12', 'align-middle');
+            keyEl.classList.add('keyEl');
             keyEl.innerHTML = `${key}:&nbsp;`;
             filterRow.append(keyEl);
 
             let input = document.createElement('input');
             input.type = 'text';
-            input.classList.add('w-5/12');
-            input.classList.add('kw-hidden');
-            input.classList.add('bg-transparent', 'inline-block', 'h-7', 'border', 'border-slate', 'rounded-md', 'sm:text-sm', 'focus:border-greyLite', 'p-1', 'pl-6', 'shadow-sm', 'placeholder-slate', 'focus:outline-none', 'align-middle');
+            input.classList.add('input', 'kw-hidden');
             input.value = this.filters[key].value;
             input.addEventListener('keyup', () =>
             {
@@ -939,7 +937,7 @@ class clsDataTable
             filterRow.append(input);
 
             let clear = document.createElement('button');
-            clear.classList.add('inline-block', 'border', 'rounded', 'text-greyDark', 'bg-greyLite', 'h-full', 'ml-1', 'w-5', 'font-bold', 'align-middle');
+            clear.classList.add('clear');
             clear.classList.add('kw-hidden');
             clear.innerHTML = 'X'
             clear.addEventListener('click', () =>
@@ -953,9 +951,7 @@ class clsDataTable
 
             let showCol = document.createElement('input');
             showCol.type = 'checkbox';
-            showCol.classList.add('bg-transparent', 'inline', 'h-7', 'border', 'border-slate', 'rounded-md', 'sm:text-sm', 'p-1', 'pl-6', 'shadow-sm', 'placeholder-slate', 'float-right', 'align-middle');
-            showCol.classList.add('focus:border-greyLite', 'focus:checked:border-greyLite', 'focus:border-greyLite', 'focus:outline-none');
-            showCol.classList.add('checked:bg-slate', 'focus:bg-white', 'focus:checked:bg-slate', 'focus-visible:bg-white', 'focus-visible:checked:bg-slate', 'hover:border-greyLite', 'hover:bg-black', 'hover:checked:bg-black');
+            showCol.classList.add('checkbox');
             showCol.checked = this.filters[key].show;
             showCol.addEventListener('change', () =>
             {
@@ -980,18 +976,18 @@ class clsDataTable
     handleExport()
     {
         let exportUI = document.createElement('div');
-        exportUI.classList.add('p-4', 'block', 'absolute', 'bg-greyLite', 'z-9999', 'border', 'rounded', 'w-96', 'h-64', 'max-h-64', 'overflow-y-auto', 'top-10', 'left-44');
+        exportUI.classList.add('exportUI');
 
         let uiTitleRow = document.createElement('div');
-        uiTitleRow.classList.add('w-full', 'mb-6');
+        uiTitleRow.classList.add('uiTitleRow');
 
         let uiTitle = document.createElement('div');
-        uiTitle.classList.add('inline-block', 'w-3/4', 'text-lg', 'font-bold');
+        uiTitle.classList.add('uiTitle');
         uiTitle.innerHTML = 'Export';
         uiTitleRow.append(uiTitle);
 
         let closeUI = document.createElement('button');
-        closeUI.classList.add('inline-block', 'border', 'rounded', 'p-2', 'text-sm', 'bg-greyLite', 'font-bold', 'float-right');
+        closeUI.classList.add('closeUI');
         closeUI.innerHTML = 'X';
         closeUI.addEventListener('click', () =>
         {
@@ -1002,7 +998,7 @@ class clsDataTable
         exportUI.append(uiTitleRow);
 
         let exportCsv = document.createElement('button');
-        exportCsv.classList.add('block', 'border', 'rounded', 'p-2', 'm-2', 'bg-slate', 'text-white', 'font-bold');
+        exportCsv.classList.add('exportCsv');
         exportCsv.innerHTML = 'Download as CSV Comma Delimited';
         exportCsv.addEventListener('click', () =>
         {
@@ -1012,7 +1008,7 @@ class clsDataTable
         exportUI.append(exportCsv);
 
         let exportTab = document.createElement('button');
-        exportTab.classList.add('block', 'border', 'rounded', 'p-2', 'm-2', 'bg-slate', 'text-white', 'font-bold');
+        exportTab.classList.add('exportTab');
         exportTab.innerHTML = 'Download as TSV Tab Delimited';
         exportTab.addEventListener('click', () =>
         {
@@ -1022,7 +1018,7 @@ class clsDataTable
         exportUI.append(exportTab);
 
         let exportJson = document.createElement('button');
-        exportJson.classList.add('block', 'border', 'rounded', 'p-2', 'm-2', 'bg-slate', 'text-white', 'font-bold');
+        exportJson.classList.add('exportJson');
         exportJson.innerHTML = 'Download as JSON';
         exportJson.addEventListener('click', () =>
         {
