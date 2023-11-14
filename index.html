@@ -37,7 +37,7 @@
         // refreshFunction: () => {
         // },
         keyMap: {
-            0: {
+           OrgRoleAssignmentID: {
                 title: 'Foo a',
                 width: '10rem',
                 minwidth: '10rem',
@@ -56,7 +56,8 @@
 
                     return btn;
                 },
-                hidden: false
+                hidden: false,
+                order:1 // specifies order
             },
             'b': {
                 title: 'Foo b',
@@ -72,7 +73,7 @@
             },
             'col1': {
                 remove: true,
-                hidden: false
+                hidden: false,
             }
         }
     });
