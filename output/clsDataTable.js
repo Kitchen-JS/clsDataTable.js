@@ -1,7 +1,13 @@
+/**************************************
+* clsdatatable - A class to build responsive tables that are populated with json data
+* @version 1.5.0
+* @lastBuild Sat May 18 2024 10:15:50 GMT-0500 (Central Daylight Time)
+* TailWind: v^3.4.1
+* @author KitchenJS
+* @link https://github.com/Kitchen-JS/clsdatatable
+**************************************/
+
 /**
- * Data Table Class that accepts JSON Data to display in a Table
- * Copyright (c) 2023 Kitchen JS - https://kitchenjs.org/
- * @version 1.2.0
  * @constructor
  * @param {object} options - Data Table options object
  * @param {object} options.keyMap - Options for columns and header title, hidden, render
@@ -86,7 +92,7 @@ class clsDataTable {
       this.container.style.minWidth = this.minWidth;
   
       this.filterUI = document.createElement("div");
-      this.filterUI.classList.add("filterUI", "kw-hidden");
+      this.filterUI.classList.add("filterUI", "hidden");
       this.container.append(this.filterUI);
   
       this.symbols.filter = "";
@@ -124,22 +130,22 @@ class clsDataTable {
       this.symbols.refresh.classList.add("refresh");
   
       // Hide until finished
-      this.symbols.filter.classList.add("kw-hidden");
+      this.symbols.filter.classList.add("hidden");
       if (this.options.hideButtons) {
-        this.symbols.filter.classList.add("kw-hidden");
-        this.symbols.paperclip.classList.add("kw-hidden");
-        this.symbols.disk.classList.add("kw-hidden");
-        this.symbols.printer.classList.add("kw-hidden");
-        this.symbols.expand.classList.add("kw-hidden");
-        this.symbols.magnify.classList.add("kw-hidden");
-        this.symbols.refresh.classList.add("kw-hidden");
+        this.symbols.filter.classList.add("hidden");
+        this.symbols.paperclip.classList.add("hidden");
+        this.symbols.disk.classList.add("hidden");
+        this.symbols.printer.classList.add("hidden");
+        this.symbols.expand.classList.add("hidden");
+        this.symbols.magnify.classList.add("hidden");
+        this.symbols.refresh.classList.add("hidden");
       }
   
       // var parser = new DOMParser();
       // let svgData = parser.parseFromString(this.symbols.paperclip.src, "image/svg+xml");
   
       this.events.filterUIClickOffWindowEvent = () => {
-        this.filterUI.classList.add("kw-hidden");
+        this.filterUI.classList.add("hidden");
         window.removeEventListener(
           "click",
           this.events.filterUIClickOffWindowEvent
@@ -310,7 +316,7 @@ class clsDataTable {
         Array.from(
           this.table.querySelectorAll(".table-row-group .table-row")
         ).forEach((row) => {
-          row.classList.remove("kw-hidden");
+          row.classList.remove("hidden");
         });
       });
       searchBox.append(searchCancelBtn);
@@ -419,9 +425,9 @@ class clsDataTable {
         });
   
         if (!found) {
-          row.classList.add("kw-hidden");
+          row.classList.add("hidden");
         } else {
-          row.classList.remove("kw-hidden");
+          row.classList.remove("hidden");
         }
       });
     }
@@ -507,13 +513,13 @@ class clsDataTable {
   
         // KeyMap Hidden
         if (this.keyMap && this.keyMap[key] && this.keyMap[key].hidden) {
-          col.classList.add("kw-hidden");
+          col.classList.add("hidden");
         } else if (
           this.keyMap &&
           this.keyMap[colCtr] &&
           this.keyMap[colCtr].hidden
         ) {
-          col.classList.add("kw-hidden");
+          col.classList.add("hidden");
         }
   
         if (this.options.sort) {
@@ -644,13 +650,13 @@ class clsDataTable {
   
           // KeyMap Hidden
           if (this.keyMap && this.keyMap[rowKey] && this.keyMap[rowKey].hidden) {
-            colEl.classList.add("kw-hidden");
+            colEl.classList.add("hidden");
           } else if (
             this.keyMap &&
             this.keyMap[colCtr] &&
             this.keyMap[colCtr].hidden
           ) {
-            colEl.classList.add("kw-hidden");
+            colEl.classList.add("hidden");
           }
   
           //Col Width
@@ -772,7 +778,7 @@ class clsDataTable {
             sibling.nodeType === 1 &&
             sibling !== this.container &&
             parents.indexOf(sibling) <= -1 &&
-            !sibling.classList.contains("kw-hidden") &&
+            !sibling.classList.contains("hidden") &&
             sibling.nodeName !== "SCRIPT"
           ) {
             otherElements.push(sibling);
@@ -790,27 +796,27 @@ class clsDataTable {
   
       // Hide other elements
       otherElements.forEach((el) => {
-        el.classList.add("kw-hidden");
+        el.classList.add("hidden");
       });
   
-      this.filterBtns.classList.add("kw-hidden");
+      this.filterBtns.classList.add("hidden");
   
       let colSort = this.table.querySelectorAll(".column-sort");
   
       colSort.forEach((col) => {
-        col.classList.add("kw-hidden");
+        col.classList.add("hidden");
       });
   
       // unHide other elements
       let afterPrint = (e) => {
         otherElements.forEach((el) => {
-          el.classList.remove("kw-hidden");
+          el.classList.remove("hidden");
         });
   
-        this.filterBtns.classList.remove("kw-hidden");
+        this.filterBtns.classList.remove("hidden");
   
         colSort.forEach((col) => {
-          col.classList.remove("kw-hidden");
+          col.classList.remove("hidden");
         });
   
         window.removeEventListener("afterprint", afterPrint);
@@ -838,7 +844,7 @@ class clsDataTable {
       closeFilterUI.classList.add("close");
       closeFilterUI.innerHTML = "X";
       closeFilterUI.addEventListener("click", () => {
-        this.filterUI.classList.add("kw-hidden");
+        this.filterUI.classList.add("hidden");
         setTimeout(() => {
           window.removeEventListener(
             "click",
@@ -858,7 +864,7 @@ class clsDataTable {
       clearFiltersBtn.classList.add("clearFilter");
       clearFiltersBtn.innerHTML = "Clear Filters";
       clearFiltersBtn.addEventListener("click", () => {
-        this.filterUI.classList.toggle("kw-hidden");
+        this.filterUI.classList.toggle("hidden");
         setTimeout(() => {
           window.removeEventListener(
             "click",
@@ -911,7 +917,7 @@ class clsDataTable {
   
         let input = document.createElement("input");
         input.type = "text";
-        input.classList.add("input", "kw-hidden");
+        input.classList.add("input", "hidden");
         input.value = this.filters[key].value;
         input.addEventListener("keyup", () => {
           this.filters[key].value = input.value;
@@ -922,7 +928,7 @@ class clsDataTable {
   
         let clear = document.createElement("button");
         clear.classList.add("clear");
-        clear.classList.add("kw-hidden");
+        clear.classList.add("hidden");
         clear.innerHTML = "X";
         clear.addEventListener("click", () => {
           input.value = "";
@@ -957,7 +963,7 @@ class clsDataTable {
         }, 800);
       });
   
-      this.filterUI.classList.toggle("kw-hidden");
+      this.filterUI.classList.toggle("hidden");
     }
   
     handleExport() {
@@ -1020,7 +1026,7 @@ class clsDataTable {
       Array.from(
         this.table.querySelectorAll(".table-header-group .table-cell")
       ).forEach((headerCell) => {
-        if (headerCell.classList.contains("kw-hidden")) {
+        if (headerCell.classList.contains("hidden")) {
           return;
         }
   
@@ -1032,7 +1038,7 @@ class clsDataTable {
       Array.from(
         this.table.querySelectorAll(".table-row-group .table-row")
       ).forEach((row) => {
-        if (row.classList.contains("kw-hidden")) {
+        if (row.classList.contains("hidden")) {
           return;
         }
   
@@ -1040,7 +1046,7 @@ class clsDataTable {
   
         let cellCtr = 0;
         Array.from(row.querySelectorAll(".table-cell")).forEach((cell) => {
-          if (cell.classList.contains("kw-hidden")) {
+          if (cell.classList.contains("hidden")) {
             return;
           }
   

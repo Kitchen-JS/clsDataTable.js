@@ -1,23 +1,21 @@
 {
-  "devDependencies": {
-    "tailwindcss": "^3.3.3"
-  },
-  "dependencies": {
-    "@node-minify/babel-minify": "^8.0.6",
-    "@node-minify/core": "^8.0.6",
-    "@tailwindcss/aspect-ratio": "^0.4.2",
-    "@tailwindcss/forms": "^0.5.3",
-    "@tailwindcss/line-clamp": "^0.4.2",
-    "@tailwindcss/typography": "^0.5.9"
-  },
   "name": "clsdatatable",
   "description": "A class to build responsive tables that are populated with json data",
-  "version": "1.2.0",
+  "version": "1.5.0",
   "main": "build.js",
   "scripts": {
-    "build": "npx tailwindcss -i ./src/input.css -o ./dist/clsDataTable.css", 
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tailwindcss -i ./tailwindInput/clsDataTable.css -o ./www/content/css/clsDataTable.css && node build.js",
+    "build-run": "tailwindcss -i ./tailwindInput/clsDataTable.css -o ./www/content/css/clsDataTable.css --watch"
   },
   "author": "",
-  "license": "ISC"
+  "license": "",
+  "dependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/container-queries": "^0.1.1",
+    "@tailwindcss/forms": "^0.5.3",
+    "@tailwindcss/line-clamp": "^0.4.2",
+    "@tailwindcss/typography": "^0.5.9",
+    "express": "^4.18.2",
+    "tailwindcss": "^3.4.1"
+  }
 }

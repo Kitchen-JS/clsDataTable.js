@@ -1,0 +1,593 @@
+/**************************************
+* clsdatatable - A class to build responsive tables that are populated with json data
+* @version 1.5.0
+* @lastBuild Sat May 18 2024 10:15:50 GMT-0500 (Central Daylight Time)
+* PEC T3-Tailwind-Theme Latest Version
+* TailWind: v^3.4.1
+* @author KitchenJS
+* @link https://github.com/Kitchen-JS/clsdatatable
+**************************************/
+
+.clsDataTableContainer
+{
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.clsDataTableContainer .filterUI
+{
+  position: absolute;
+  top: 2.5rem;
+  left: 11rem;
+  z-index: 9999;
+  display: block;
+  height: 16rem;
+  max-height: 16rem;
+  width: 24rem;
+  overflow-y: auto;
+  border-radius: 0.25rem;
+  border-width: 1px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(184 184 184 / var(--tw-bg-opacity));
+  padding: 1rem;
+}
+
+.clsDataTableContainer .filterBtns
+{
+  display: block;
+  height: 1.75rem;
+  width: 100%;
+  padding: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.clsDataTableContainer .filterBtns .paperclip.pushed
+{
+  border-radius: 0.25rem;
+  border-width: 2px;
+  --tw-border-opacity: 1;
+  border-color: rgb(40 167 69 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(40 167 69 / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(40 167 69 / var(--tw-text-opacity));
+  text-decoration-line: underline;
+}
+
+.clsDataTableContainer .toolbar-button
+{
+  margin-right: 0.75rem;
+  display: inline-block;
+  height: 1.25rem;
+  width: 1.25rem;
+  cursor: pointer;
+  vertical-align: bottom;
+}
+
+.clsDataTableContainer .searchBox
+{
+  float: right;
+  margin-bottom: 0.25rem;
+  height: 1.75rem;
+}
+
+.clsDataTableContainer .searchInput
+{
+  display: inline-block;
+  height: 1.75rem;
+  border-radius: 0.375rem;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(71 85 105 / var(--tw-border-opacity));
+  background-color: transparent;
+  padding: 0.25rem;
+  padding-left: 1.5rem;
+}
+
+.clsDataTableContainer .searchInput::-moz-placeholder
+{
+  --tw-placeholder-opacity: 1;
+  color: rgb(71 85 105 / var(--tw-placeholder-opacity));
+}
+
+.clsDataTableContainer .searchInput::placeholder
+{
+  --tw-placeholder-opacity: 1;
+  color: rgb(71 85 105 / var(--tw-placeholder-opacity));
+}
+
+.clsDataTableContainer .searchInput
+{
+  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.clsDataTableContainer .searchInput:focus
+{
+  --tw-border-opacity: 1;
+  border-color: rgb(184 184 184 / var(--tw-border-opacity));
+}
+
+@media (min-width: 640px)
+{
+  .clsDataTableContainer .searchInput
+{
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+}
+
+.clsDataTableContainer .searchInput
+{
+  /* focus:outline-none */
+}
+
+.clsDataTableContainer .searchCancelBtn
+{
+  margin-left: 0.25rem;
+  display: inline-block;
+  height: 100%;
+  width: 1.5rem;
+  border-radius: 0.25rem;
+  border-width: 1px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(184 184 184 / var(--tw-bg-opacity));
+  text-align: center;
+  font-weight: 700;
+  --tw-text-opacity: 1;
+  color: rgb(84 84 84 / var(--tw-text-opacity));
+}
+
+.clsDataTableContainer .table
+{
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(71 85 105 / var(--tw-border-opacity));
+  text-align: left;
+}
+
+.clsDataTableContainer .table .table-header-group
+{
+  --tw-bg-opacity: 1;
+  background-color: rgb(184 184 184 / var(--tw-bg-opacity));
+}
+
+.clsDataTableContainer .table .table-header-group.sticky-header
+{
+  position: sticky;
+  top: 0px;
+}
+
+.clsDataTableContainer .table .table-row
+{
+  -moz-column-break-inside: avoid;
+       break-inside: avoid;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(71 85 105 / var(--tw-border-opacity));
+}
+
+.clsDataTableContainer .table .table-cell
+{
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(71 85 105 / var(--tw-border-opacity));
+  padding: 0.25rem;
+}
+
+.clsDataTableContainer .table .column-sort
+{
+  float: right;
+  cursor: pointer;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  --tw-text-opacity: 1;
+  color: rgb(84 84 84 / var(--tw-text-opacity));
+}
+
+.clsDataTableContainer .table .column-sort div
+{
+  display: block;
+  line-height: 1;
+}
+
+.clsDataTableContainer .table .table-row-group
+{
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(71 85 105 / var(--tw-border-opacity));
+}
+
+.clsDataTableContainer .no-results
+{
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(71 85 105 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(184 184 184 / var(--tw-bg-opacity));
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+  /* text-center border border-slate-600 text-xl font-bold p-4 */
+}
+
+.clsDataTableContainer .titleRow
+{
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
+
+.clsDataTableContainer .titleRow .title
+{
+  display: inline-block;
+  width: 66.666667%;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+}
+
+.clsDataTableContainer .titleRow .close
+{
+  float: right;
+  margin-left: 0.25rem;
+  display: inline-block;
+  height: 100%;
+  width: 1.5rem;
+  border-radius: 0.25rem;
+  border-width: 1px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(184 184 184 / var(--tw-bg-opacity));
+  text-align: center;
+  font-weight: 700;
+  --tw-text-opacity: 1;
+  color: rgb(84 84 84 / var(--tw-text-opacity));
+}
+
+.clsDataTableContainer .titleRow .clearFilter
+{
+  border-radius: 0.25rem;
+  border-width: 1px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(184 184 184 / var(--tw-bg-opacity));
+  padding: 0.25rem;
+  text-align: center;
+  --tw-text-opacity: 1;
+  color: rgb(84 84 84 / var(--tw-text-opacity));
+}
+
+.clsDataTableContainer .filterUI .colHeadRow
+{
+  margin-bottom: 0.75rem;
+  width: 100%;
+  font-weight: 700;
+}
+
+.clsDataTableContainer .filterUI .colHeadRow .chrc1
+{
+  display: inline-block;
+  width: 16.666667%;
+  text-align: left;
+  text-decoration-line: underline;
+}
+
+.clsDataTableContainer .filterUI .colHeadRow .chrc2
+{
+  display: inline-block;
+  width: 41.666667%;
+  text-align: center;
+  text-decoration-line: underline;
+}
+
+.clsDataTableContainer .filterUI .colHeadRow .chrc3
+{
+  display: inline-block;
+  width: 8.333333%;
+  text-align: center;
+  text-decoration-line: underline;
+}
+
+.clsDataTableContainer .filterUI .colHeadRow .chrc4
+{
+  display: inline-block;
+  width: 33.333333%;
+  text-align: right;
+  text-decoration-line: underline;
+}
+
+.clsDataTableContainer .filterUI .filterContainer
+{
+  display: block;
+}
+
+.clsDataTableContainer .filterUI .filterContainer .filterRow
+{
+  margin-bottom: 0.5rem;
+  width: 100%;
+  vertical-align: middle;
+}
+
+.clsDataTableContainer .filterUI .keyEl
+{
+  display: inline-block;
+  width: 16.666667%;
+  vertical-align: middle;
+}
+
+.clsDataTableContainer .filterRow .input
+{
+  display: inline-block;
+  height: 1.75rem;
+  width: 41.666667%;
+  border-radius: 0.375rem;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(71 85 105 / var(--tw-border-opacity));
+  background-color: transparent;
+  padding: 0.25rem;
+  padding-left: 1.5rem;
+  vertical-align: middle;
+}
+
+.clsDataTableContainer .filterRow .input::-moz-placeholder
+{
+  --tw-placeholder-opacity: 1;
+  color: rgb(71 85 105 / var(--tw-placeholder-opacity));
+}
+
+.clsDataTableContainer .filterRow .input::placeholder
+{
+  --tw-placeholder-opacity: 1;
+  color: rgb(71 85 105 / var(--tw-placeholder-opacity));
+}
+
+.clsDataTableContainer .filterRow .input
+{
+  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.clsDataTableContainer .filterRow .input:focus
+{
+  --tw-border-opacity: 1;
+  border-color: rgb(184 184 184 / var(--tw-border-opacity));
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+@media (min-width: 640px)
+{
+  .clsDataTableContainer .filterRow .input
+{
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+}
+
+.clsDataTableContainer .filterRow .clear
+{
+  margin-left: 0.25rem;
+  display: inline-block;
+  height: 100%;
+  width: 1.25rem;
+  border-radius: 0.25rem;
+  border-width: 1px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(184 184 184 / var(--tw-bg-opacity));
+  vertical-align: middle;
+  font-weight: 700;
+  --tw-text-opacity: 1;
+  color: rgb(84 84 84 / var(--tw-text-opacity));
+}
+
+.clsDataTableContainer .filterRow .checkbox
+{
+  float: right;
+  display: inline;
+  height: 1.75rem;
+  border-radius: 0.375rem;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(71 85 105 / var(--tw-border-opacity));
+  background-color: transparent;
+  padding: 0.25rem;
+  padding-left: 1.5rem;
+  vertical-align: middle;
+}
+
+.clsDataTableContainer .filterRow .checkbox::-moz-placeholder
+{
+  --tw-placeholder-opacity: 1;
+  color: rgb(71 85 105 / var(--tw-placeholder-opacity));
+}
+
+.clsDataTableContainer .filterRow .checkbox::placeholder
+{
+  --tw-placeholder-opacity: 1;
+  color: rgb(71 85 105 / var(--tw-placeholder-opacity));
+}
+
+.clsDataTableContainer .filterRow .checkbox
+{
+  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.clsDataTableContainer .filterRow .checkbox:checked
+{
+  --tw-bg-opacity: 1;
+  background-color: rgb(71 85 105 / var(--tw-bg-opacity));
+}
+
+.clsDataTableContainer .filterRow .checkbox:hover
+{
+  --tw-border-opacity: 1;
+  border-color: rgb(184 184 184 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+}
+
+.clsDataTableContainer .filterRow .checkbox:checked:hover
+{
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+}
+
+.clsDataTableContainer .filterRow .checkbox:focus
+{
+  --tw-border-opacity: 1;
+  border-color: rgb(184 184 184 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.clsDataTableContainer .filterRow .checkbox:checked:focus
+{
+  --tw-border-opacity: 1;
+  border-color: rgb(184 184 184 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(71 85 105 / var(--tw-bg-opacity));
+}
+
+.clsDataTableContainer .filterRow .checkbox:focus-visible
+{
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.clsDataTableContainer .filterRow .checkbox:checked:focus-visible
+{
+  --tw-bg-opacity: 1;
+  background-color: rgb(71 85 105 / var(--tw-bg-opacity));
+}
+
+@media (min-width: 640px)
+{
+  .clsDataTableContainer .filterRow .checkbox
+{
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+}
+
+.clsDataTableContainer .exportUI
+{
+  position: absolute;
+  top: 2.5rem;
+  left: 11rem;
+  z-index: 9999;
+  display: block;
+  height: 16rem;
+  max-height: 16rem;
+  width: 24rem;
+  overflow-y: auto;
+  border-radius: 0.25rem;
+  border-width: 1px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(184 184 184 / var(--tw-bg-opacity));
+  padding: 1rem;
+}
+
+.clsDataTableContainer .exportUI .uiTitleRow
+{
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.clsDataTableContainer .exportUI .uiTitle
+{
+  display: inline-block;
+  width: 75%;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+}
+
+.clsDataTableContainer .exportUI .closeUI
+{
+  float: right;
+  display: inline-block;
+  border-radius: 0.25rem;
+  border-width: 1px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(184 184 184 / var(--tw-bg-opacity));
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 700;
+}
+
+.clsDataTableContainer .exportUI .exportCsv
+{
+  margin: 0.5rem;
+  display: block;
+  border-radius: 0.25rem;
+  border-width: 1px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(71 85 105 / var(--tw-bg-opacity));
+  padding: 0.5rem;
+  font-weight: 700;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.clsDataTableContainer .exportUI .exportTab
+{
+  margin: 0.5rem;
+  display: block;
+  border-radius: 0.25rem;
+  border-width: 1px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(71 85 105 / var(--tw-bg-opacity));
+  padding: 0.5rem;
+  font-weight: 700;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.clsDataTableContainer .exportUI .exportJson
+{
+  margin: 0.5rem;
+  display: block;
+  border-radius: 0.25rem;
+  border-width: 1px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(71 85 105 / var(--tw-bg-opacity));
+  padding: 0.5rem;
+  font-weight: 700;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.hidden
+{
+  display: none !important;
+}
+
+@keyframes rotating 
+{
+  from 
+    {
+    transform: rotate(0deg);
+  }
+
+  to 
+    {
+    transform: rotate(360deg);
+  }
+}
+
+.rotating 
+{
+  animation: rotating 2s linear infinite;
+}

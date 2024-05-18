@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/dist/clsDataTable.css" rel="stylesheet">
+
+    <link href="/content/theme/KitchenTWBaseTheme.css" rel="stylesheet">
+
+
+    <link href="/content/css/clsDataTable.css" rel="stylesheet">
+    <script src="/content/js/clsDataTable.js"></script>
 </head>
 <body>
 
@@ -13,10 +18,7 @@
     <div class="cntr"></div>
     
 </body>
-<script src="src/GenerateJsonData.js"></script>
-
-<!-- <script src="src/clsDataTable.js"></script> -->
-<script src="src/clsDataTable.js"></script>
+<script src="/content/js/GenerateJsonData.js"></script>
 
 <script>
 
@@ -45,7 +47,7 @@
                 render: (data) =>
                 {
                     let btn = document.createElement('button');
-                    //btn.classList.add('border', 'w-full', 'rounded', 'bg-greyLite');
+                    //btn.classList.add('border', 'w-full', 'rounded', 'bg-grey-100');
                     //btn.style = 'border: 1px solid';
                     btn.innerHTML = 'Bob';
                     btn.value = data;
