@@ -1,6 +1,6 @@
 .clsDataTableContainer
 {
-    @apply bg-white;
+    
 }
 .clsDataTableContainer .filterUI
 {
@@ -8,7 +8,8 @@
 }
 .clsDataTableContainer .filterBtns
 {
-    @apply w-full block text-xs p-1 h-7;
+    @apply w-full block bg-transparent;
+    /* text-xs p-1 h-7 */
 }
 .clsDataTableContainer .filterBtns .paperclip.pushed
 {
@@ -16,7 +17,8 @@
 }
 .clsDataTableContainer .toolbar-button
 {
-    @apply w-5 h-5 mr-3 inline-block align-bottom cursor-pointer;
+    @apply mr-3 inline-block align-bottom cursor-pointer text-[1.5rem];
+    /* w-5 h-5 */
 }
 .clsDataTableContainer .searchBox
 {
@@ -37,7 +39,7 @@
 }
 .clsDataTableContainer .table .table-header-group
 {
-    @apply bg-grey-100;
+    @apply bg-grey-100 text-white;
 }
 .clsDataTableContainer .table .table-header-group.sticky-header
 {
@@ -68,8 +70,6 @@
     @apply bg-grey-100 border border-slate-600 text-center text-xl font-bold p-4;
     /* text-center border border-slate-600 text-xl font-bold p-4 */
 }
-
-
 .clsDataTableContainer .titleRow
 {
     @apply w-full mb-3;

@@ -1,7 +1,5 @@
 .clsDataTableContainer
 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
 .clsDataTableContainer .filterUI
@@ -25,11 +23,9 @@
 .clsDataTableContainer .filterBtns
 {
   display: block;
-  height: 1.75rem;
   width: 100%;
-  padding: 0.25rem;
-  font-size: 0.75rem;
-  line-height: 1rem;
+  background-color: transparent;
+  /* text-xs p-1 h-7 */
 }
 
 .clsDataTableContainer .filterBtns .paperclip.pushed
@@ -49,10 +45,10 @@
 {
   margin-right: 0.75rem;
   display: inline-block;
-  height: 1.25rem;
-  width: 1.25rem;
   cursor: pointer;
   vertical-align: bottom;
+  font-size: 1.5rem;
+  /* w-5 h-5 */
 }
 
 .clsDataTableContainer .searchBox
@@ -145,6 +141,8 @@
 {
   --tw-bg-opacity: 1;
   background-color: rgb(184 184 184 / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .clsDataTableContainer .table .table-header-group.sticky-header
