@@ -8,6 +8,8 @@
     <script src="/content/fonts/kfi.js"></script>
 
     <link href="/content/theme/KitchenTWBaseTheme.css" rel="stylesheet">
+    <script src="/content/theme/clsTailwind.js"></script>
+    <script src="/content/theme/KitchenTWBaseTheme.js"></script>
 
     <link href="/content/css/clsDataTable.css" rel="stylesheet">
     <script src="/content/js/clsDataTable.js"></script>
@@ -15,6 +17,20 @@
     <script src="/content/js/GenerateJsonData.js"></script>
 </head>
 <body>
+
+    <div class="my-9">
+        <button class="btn toggle">Toggle Light/Dark Mode</button>&nbsp;&nbsp;<button class="btn clear">Clear Light/Dark Mode</button>
+        <script>
+            document.querySelector('.toggle').addEventListener('click', () =>
+            {
+                tailwind.toggleColorScheme();
+            });
+            document.querySelector('.clear').addEventListener('click', () =>
+            {
+                tailwind.resetColorScheme();
+            });
+        </script>
+    </div>
 
     <button class="changeData" style="margin: 1px; margin-bottom: 2rem; border: 1px solid #000; border-radius: 7px; padding: 8px; background-color:grey; cursor: pointer; color: #fff; font-weight: bold;">Change Data</button>
     <button class="T3Data" style="margin: 1px; margin-bottom: 2rem; border: 1px solid #000; border-radius: 7px; padding: 8px; background-color:grey; cursor: pointer; color: #fff; font-weight: bold;">T3 Data</button>
@@ -87,10 +103,12 @@
     // numCols, numRows,
     // dType: bare, keyed
     // rType: string, json
-    let jsonData = GenerateJsonData(5, 8, 'keyed', 'json');
-    
-    dt.setJsonData(jsonData);
+    // let jsonData = GenerateJsonData(5, 8, 'keyed', 'json');
+    // dt.setJsonData(jsonData);
     //console.log(JSON.stringify(jsonData))
+
+    jsonData = JSON.parse('[{"RecordLastUpdateDateTime":"/Date(1682622250243)/","OrgRoleAssignmentID":102,"RoleName":"SupportLead","FName":"Matthew","MName":"","LName":"Darling","Active":false,"fk_PersonID":235744},{"RecordLastUpdateDateTime":"/Date(1678384113520)/","OrgRoleAssignmentID":93,"RoleName":"SupportLead","FName":"Matthew","MName":"","LName":"Darling","Active":false,"fk_PersonID":235744},{"RecordLastUpdateDateTime":"/Date(1682622251713)/","OrgRoleAssignmentID":92,"RoleName":"StandupLead","FName":"Matthew","MName":"","LName":"Darling","Active":false,"fk_PersonID":235744},{"RecordLastUpdateDateTime":"/Date(1675361528187)/","OrgRoleAssignmentID":91,"RoleName":"SupportLead","FName":"Matthew","MName":"","LName":"Darling","Active":false,"fk_PersonID":235744},{"RecordLastUpdateDateTime":"/Date(1682622251993)/","OrgRoleAssignmentID":101,"RoleName":"StandupLead","FName":"Andrew","MName":"Zane","LName":"DeClue","Active":true,"fk_PersonID":217716},{"RecordLastUpdateDateTime":"/Date(1678384302500)/","OrgRoleAssignmentID":86,"RoleName":"StandupLead","FName":"Andrew","MName":"Zane","LName":"DeClue","Active":false,"fk_PersonID":217716},{"RecordLastUpdateDateTime":"/Date(1682622251833)/","OrgRoleAssignmentID":85,"RoleName":"SupportLead","FName":"Andrew","MName":"Zane","LName":"DeClue","Active":false,"fk_PersonID":217716},{"RecordLastUpdateDateTime":"/Date(1678384114520)/","OrgRoleAssignmentID":89,"RoleName":"SupportLead","FName":"Andrew","MName":"","LName":"Reddin","Active":false,"fk_PersonID":236071},{"RecordLastUpdateDateTime":"/Date(1678384302550)/","OrgRoleAssignmentID":88,"RoleName":"StandupLead","FName":"Andrew","MName":"","LName":"Reddin","Active":false,"fk_PersonID":236071},{"RecordLastUpdateDateTime":"/Date(1675361530477)/","OrgRoleAssignmentID":87,"RoleName":"SupportLead","FName":"Andrew","MName":"","LName":"Reddin","Active":false,"fk_PersonID":236071},{"RecordLastUpdateDateTime":"/Date(1682622251957)/","OrgRoleAssignmentID":100,"RoleName":"SupportLead","FName":"Caleb","MName":"EDISON","LName":"Trachte","Active":true,"fk_PersonID":125275},{"RecordLastUpdateDateTime":"/Date(1682622251913)/","OrgRoleAssignmentID":99,"RoleName":"StandupLead","FName":"Caleb","MName":"EDISON","LName":"Trachte","Active":false,"fk_PersonID":125275},{"RecordLastUpdateDateTime":"/Date(1678384302583)/","OrgRoleAssignmentID":90,"RoleName":"StandupLead","FName":"Caleb","MName":"EDISON","LName":"Trachte","Active":false,"fk_PersonID":125275},{"RecordLastUpdateDateTime":"/Date(1674142175820)/","OrgRoleAssignmentID":84,"RoleName":"StandupLead","FName":"Caleb","MName":"EDISON","LName":"Trachte","Active":false,"fk_PersonID":125275}]');
+    dt.setJsonData(jsonData);
 
     document.querySelector('.changeData').addEventListener('click', () =>
     {
@@ -106,7 +124,7 @@
     });
 
     // dt.setJsonData('[[{"a":"Pellentesque"},{"b":"porttitor"},{"c":"libero"},{"d":"fermentum"},{"e":"tincidunt ex non est tempus"}],[{"a":"massa"},{"b":"libero"},{"c":"tincidunt feugiat in vulputate nisl"},{"d":"Pellentesque"},{"e":"libero"}],[{"a":"tincidunt ex non est tempus"},{"b":"tincidunt ex non est tempus"},{"c":"Pellentesque"},{"d":"fermentum"},{"e":"tincidunt feugiat in vulputate nisl"}],[{"a":"Pellentesque"},{"b":"Pellentesque"},{"c":"porttitor"},{"d":"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit"},{"e":"Pellentesque"}],[{"a":"porttitor"},{"b":"fermentum"},{"c":"porttitor"},{"d":"Pellentesque"},{"e":"Pellentesque"}],[{"a":"porttitor"},{"b":"libero"},{"c":"porttitor"},{"d":"tincidunt ex non est tempus"},{"e":"fermentum"}],[{"a":"libero"},{"b":"vulputate"},{"c":"feugiat"},{"d":"Etiam in consequat"},{"e":"feugiat"}],[{"a":"tincidunt feugiat in vulputate nisl"},{"b":"Quisque eu lorem elementum"},{"c":"Quisque eu lorem elementum"},{"d":"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit"},{"e":"feugiat"}],[{"a":"tincidunt feugiat in vulputate nisl"},{"b":"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit"},{"c":"libero"},{"d":"vulputate"},{"e":"Quisque eu lorem elementum"}],[{"a":"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit"},{"b":"tincidunt feugiat in vulputate nisl"},{"c":"massa"},{"d":"Quisque eu lorem elementum"},{"e":"Etiam in consequat"}]]');
-    // dt.setJsonData('[["feugiat","libero","vulputate","libero","libero"],["vulputate","Pellentesque","Quisque eu lorem elementum","fermentum","Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit"],["porttitor","Etiam in consequat","tincidunt ex non est tempus","vulputate","fermentum"],["porttitor","feugiat","Pellentesque","Quisque eu lorem elementum","libero"],["tincidunt ex non est tempus","porttitor","tincidunt feugiat in vulputate nisl","libero","Pellentesque"],["vulputate","vulputate","tincidunt feugiat in vulputate nisl","Quisque eu lorem elementum","Pellentesque"],["porttitor","tincidunt ex non est tempus","Quisque eu lorem elementum","tincidunt ex non est tempus","vulputate"],["feugiat","feugiat","tincidunt feugiat in vulputate nisl","Etiam in consequat","vulputate"],["Pellentesque","feugiat","Pellentesque","Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit","porttitor"],["Etiam in consequat","libero","libero","massa","tincidunt ex non est tempus"]]');
+    //dt.setJsonData('[["feugiat","libero","vulputate","libero","libero"],["vulputate","Pellentesque","Quisque eu lorem elementum","fermentum","Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit"],["porttitor","Etiam in consequat","tincidunt ex non est tempus","vulputate","fermentum"],["porttitor","feugiat","Pellentesque","Quisque eu lorem elementum","libero"],["tincidunt ex non est tempus","porttitor","tincidunt feugiat in vulputate nisl","libero","Pellentesque"],["vulputate","vulputate","tincidunt feugiat in vulputate nisl","Quisque eu lorem elementum","Pellentesque"],["porttitor","tincidunt ex non est tempus","Quisque eu lorem elementum","tincidunt ex non est tempus","vulputate"],["feugiat","feugiat","tincidunt feugiat in vulputate nisl","Etiam in consequat","vulputate"],["Pellentesque","feugiat","Pellentesque","Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit","porttitor"],["Etiam in consequat","libero","libero","massa","tincidunt ex non est tempus"]]');
 
 </script>
 </html>

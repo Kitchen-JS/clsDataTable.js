@@ -13,7 +13,7 @@
 }
 .clsDataTableContainer .filterBtns .paperclip.pushed
 {
-    @apply border-2 border-success rounded bg-success text-success underline;
+    @apply border-2 border-success rounded bg-success text-black underline;
 }
 .clsDataTableContainer .toolbar-button
 {
@@ -39,19 +39,27 @@
 }
 .clsDataTableContainer .table .table-header-group
 {
-    @apply bg-grey-100 text-white;
+    @apply bg-grey-100 text-black dark:text-black;
 }
 .clsDataTableContainer .table .table-header-group.sticky-header
 {
     @apply sticky top-0;
 }
+.clsDataTableContainer .table .table-header-group .table-row
+{
+    @apply dark:bg-grey-900;
+}
 .clsDataTableContainer .table .table-row
 {
-    @apply break-inside-avoid border border-slate-600;
+    @apply break-inside-avoid border border-slate-600 dark:border-grey-50 text-black dark:text-white;
+}
+.clsDataTableContainer .table .table-row.alt-row
+{
+    @apply bg-gray-200 dark:bg-slate-600 dark:border-grey-50 text-black dark:text-white;
 }
 .clsDataTableContainer .table .table-cell
 {
-    @apply p-1 border border-slate-600;
+    @apply p-1 border border-slate-600 dark:border-grey-50;
 }
 .clsDataTableContainer .table .column-sort
 {
@@ -167,17 +175,17 @@
 
 .clsDataTableContainer .exportUI .exportCsv
 {
-    @apply block border rounded p-2 m-2 bg-slate-600 text-white font-bold;
+    @apply block border rounded p-2 m-2 bg-slate-800 text-white font-bold;
 }
 
 .clsDataTableContainer .exportUI .exportTab
 {
-    @apply block border rounded p-2 m-2 bg-slate-600 text-white font-bold;
+    @apply block border rounded p-2 m-2 bg-slate-800 text-white font-bold;
 }
 
 .clsDataTableContainer .exportUI .exportJson
 {
-    @apply block border rounded p-2 m-2 bg-slate-600 text-white font-bold;
+    @apply block border rounded p-2 m-2 bg-slate-800 text-white font-bold;
 }
 
 .hidden
