@@ -1,7 +1,7 @@
 /**************************************
 * clsdatatable - A class to build responsive tables that are populated with json data
 * @version 1.5.2
-* @lastBuild Sun May 19 2024 17:18:22 GMT-0500 (Central Daylight Time)
+* @lastBuild Sat Aug 17 2024 14:48:02 GMT-0500 (Central Daylight Time)
 * TailWind: v^3.4.1
 * @author KitchenJS
 * @link https://github.com/Kitchen-JS/clsdatatable
@@ -207,6 +207,11 @@ class clsDataTable
     // Handle column deletions from option KeyMap remove
     jsonData.forEach( ( row ) =>
     {
+      // Handle when keymap not provided
+      if(!this.keyMap)
+      {
+        return;
+      }
       Object.keys( this.keyMap ).forEach( ( key ) =>
       {
         if ( typeof this.keyMap[key].remove !== "undefined" && this.keyMap[key].remove )

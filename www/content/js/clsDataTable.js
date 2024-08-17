@@ -198,6 +198,11 @@ class clsDataTable
     // Handle column deletions from option KeyMap remove
     jsonData.forEach( ( row ) =>
     {
+      // Handle when keymap not provided
+      if(!this.keyMap)
+      {
+        return;
+      }
       Object.keys( this.keyMap ).forEach( ( key ) =>
       {
         if ( typeof this.keyMap[key].remove !== "undefined" && this.keyMap[key].remove )
