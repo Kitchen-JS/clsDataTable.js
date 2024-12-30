@@ -1,7 +1,7 @@
 {
   "name": "clsdatatable",
   "description": "A class to build responsive tables that are populated with json data",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "main": "build.js",
   "scripts": {
     "build": "tailwindcss -i ./tailwindInput/clsDataTable.css -o ./www/content/css/clsDataTable.css && node build.js",

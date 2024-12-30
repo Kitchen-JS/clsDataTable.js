@@ -90,12 +90,12 @@ class clsDataTable
   {
     this.id = this.randomID();
     this.container.id = this.id || this.randomID();
-    this.container.classList.add( "clsDataTableContainer" );
+    this.container.classList.add('clsDataTableContainer', 'no-scrollbar');
 
     this.container.style.minWidth = this.minWidth;
 
     this.filterUI = document.createElement( "div" );
-    this.filterUI.classList.add( "filterUI", "hidden" );
+    this.filterUI.classList.add( "filterUI", "hidden");
     this.container.append( this.filterUI );
 
     this.symbols.filter = "";

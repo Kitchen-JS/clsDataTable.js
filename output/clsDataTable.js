@@ -1,7 +1,7 @@
 /**************************************
 * clsdatatable - A class to build responsive tables that are populated with json data
-* @version 1.5.3
-* @lastBuild Mon Dec 30 2024 09:13:46 GMT-0600 (Central Standard Time)
+* @version 1.5.4
+* @lastBuild Mon Dec 30 2024 09:39:51 GMT-0600 (Central Standard Time)
 * TailWind: v^3.4.1
 * @author KitchenJS
 * @link https://github.com/Kitchen-JS/clsdatatable
@@ -99,12 +99,12 @@ class clsDataTable
   {
     this.id = this.randomID();
     this.container.id = this.id || this.randomID();
-    this.container.classList.add( "clsDataTableContainer" );
+    this.container.classList.add('clsDataTableContainer', 'no-scrollbar');
 
     this.container.style.minWidth = this.minWidth;
 
     this.filterUI = document.createElement( "div" );
-    this.filterUI.classList.add( "filterUI", "hidden" );
+    this.filterUI.classList.add( "filterUI", "hidden");
     this.container.append( this.filterUI );
 
     this.symbols.filter = "";
