@@ -188,7 +188,7 @@
     @apply block border rounded p-2 m-2 bg-slate-800 text-white font-bold;
 }
 
-.hidden
+.clsDataTableContainer .hidden
 {
     display: none !important;
 }
@@ -208,7 +208,7 @@
       transform: rotate(360deg);
     }
 }
-@keyframes rotating 
+@keyframes clsDataTable-rotating
 {
     from 
     {
@@ -227,11 +227,11 @@
       transform: rotate(360deg);
     }
 }
-.rotating 
+.clsDataTable-rotating 
 {
-    -webkit-animation: rotating 2s linear infinite;
-    -moz-animation: rotating 2s linear infinite;
-    -ms-animation: rotating 2s linear infinite;
-    -o-animation: rotating 2s linear infinite;
-    animation: rotating 2s linear infinite;
+    -webkit-animation: clsDataTable-rotating 2s linear infinite;
+    -moz-animation: clsDataTable-rotating 2s linear infinite;
+    -ms-animation: clsDataTable-rotating 2s linear infinite;
+    -o-animation: clsDataTable-rotating 2s linear infinite;
+    animation: clsDataTable-rotating 2s linear infinite;
 }

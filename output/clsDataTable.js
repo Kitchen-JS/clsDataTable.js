@@ -1,7 +1,7 @@
 /**************************************
 * clsdatatable - A class to build responsive tables that are populated with json data
-* @version 1.5.2
-* @lastBuild Sat Aug 17 2024 14:48:02 GMT-0500 (Central Daylight Time)
+* @version 1.5.3
+* @lastBuild Mon Dec 30 2024 09:13:46 GMT-0600 (Central Standard Time)
 * TailWind: v^3.4.1
 * @author KitchenJS
 * @link https://github.com/Kitchen-JS/clsdatatable
@@ -205,9 +205,26 @@ class clsDataTable
     }
 
     // Handle column deletions from option KeyMap remove
-    jsonData.forEach( ( row ) =>
+    if(Array.isArray(jsonData))
     {
-      // Handle when keymap not provided
+      jsonData.forEach( ( row ) =>
+      {
+        // Handle when keymap not provided
+        if(!this.keyMap)
+        {
+          return;
+        }
+        Object.keys( this.keyMap ).forEach( ( key ) =>
+        {
+          if ( typeof this.keyMap[key].remove !== "undefined" && this.keyMap[key].remove )
+          {
+            delete row[key.toString()];
+          }
+        } );
+      } );
+    }
+    else
+    {
       if(!this.keyMap)
       {
         return;
@@ -216,12 +233,22 @@ class clsDataTable
       {
         if ( typeof this.keyMap[key].remove !== "undefined" && this.keyMap[key].remove )
         {
-          delete row[key.toString()];
+          delete jsonData[key.toString()];
         }
       } );
-    } );
+    }
+    
+    
 
     this.jsonData = jsonData;
+
+    if(typeof this.jsonData !== 'undefined' && !Array.isArray(this.jsonData) && Array.isArray(Object.keys(this.jsonData)))
+    {
+      this.jsonData = [this.jsonData];
+      //console.log(this.jsonData)
+      //console.log(Array.isArray(this.jsonData))
+    }
+
     if ( typeof this.jsonData === "undefined" || !this.jsonData || this.jsonData.length < 1 )
     {
       console.log( "clsDataTable.update: jsonData is empty" );
@@ -271,7 +298,6 @@ class clsDataTable
       navigator.clipboard.writeText( data );
 
       this.symbols.paperclip.classList.add( "pushed" );
-      //this.symbols.paperclip
 
       setTimeout( () =>
       {
@@ -309,11 +335,11 @@ class clsDataTable
 
       this.options.refreshFunction();
 
-      this.symbols.refresh.classList.add( "rotating" );
+      this.symbols.refresh.classList.add( "clsDataTable-rotating" );
 
       setTimeout( () =>
       {
-        this.symbols.refresh.classList.remove( "rotating" );
+        this.symbols.refresh.classList.remove( "clsDataTable-rotating" );
       }, 500 );
     } );
 
